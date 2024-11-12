@@ -2,9 +2,8 @@
 
 public class TransactionDetailDTO
 {
-    public long Id { get; set; }
+    public string Id => $"HASH OF {UserAddress}+{ChainId}+{PoolId}";
 
-    // Create index for UserAddress + ChainId + PoolId
     public string UserAddress { get; set; }
     public long ChainId { get; set; }
     public long PoolId { get; set; }
