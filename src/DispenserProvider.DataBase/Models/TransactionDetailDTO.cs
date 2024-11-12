@@ -8,5 +8,12 @@ public class TransactionDetailDTO
     public long ChainId { get; set; }
     public long PoolId { get; set; }
 
+    public string? Signature { get; set; }
+    public virtual SignatureDTO? UserSignature { get; set; }
+
+
     public virtual List<BuilderDTO> Builders { get; set; }
+
+    public virtual TransactionDetailDTO WithdrawalTransactions { get; set; }
+    public virtual TransactionDetailDTO? RefundTransactions { get; set; }
 }
