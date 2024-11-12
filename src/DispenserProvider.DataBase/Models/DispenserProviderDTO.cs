@@ -2,20 +2,16 @@
 
 public class DispenserProviderDTO
 {
-    public int Id { get; set; }
+    public string Id => $"HASH OF {UserAddress}+{WithdrawalDetailId}";
 
-    /// <summary>
-    /// This field will be set by the administrator during initialization.
-    /// </summary>
     public string UserAddress { get; set; } = null!;
 
     public string? Signature { get; set; }
     public virtual SignatureDTO UserSignature { get; set; }
 
-
-    public int WithdrawalDetailId { get; set; }
+    public string WithdrawalDetailId { get; set; }
     public virtual TransactionDetailDTO WithdrawalDetail { get; set; }
 
-    public int? RefundDetailId { get; set; }
+    public string? RefundDetailId { get; set; }
     public virtual TransactionDetailDTO? RefundDetail { get; set; }
 }
