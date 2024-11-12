@@ -15,6 +15,7 @@ public class DispenserProviderDTO
     public string Signature { get; set; }
     public DateTime ValidFrom { get; set; }
     public DateTime ValidUntil { get; set; }
+    public bool IsRefund { get; set; }
 
     // or
 
@@ -22,8 +23,6 @@ public class DispenserProviderDTO
     //public virtual SignatureDTO Signature { get; set; }
 
     #endregion
-
-    public bool IsRefund { get; set; }
 
     public int WithdrawalDetailId { get; set; }
     public virtual TransactionDetailDTO WithdrawalDetail { get; set; }
