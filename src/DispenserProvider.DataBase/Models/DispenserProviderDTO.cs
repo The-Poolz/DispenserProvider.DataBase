@@ -23,8 +23,7 @@ public class DispenserProviderDTO
 
     #endregion
 
-    // I think it can be easily calculated on back and don't need to store this data. Or i miss something?
-    //public bool IsRefund { get; set; }
+    public bool IsRefund { get; set; }
 
     public int WithdrawalDetailId { get; set; }
     public virtual TransactionDetailDTO WithdrawalDetail { get; set; }
