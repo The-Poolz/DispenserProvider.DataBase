@@ -2,15 +2,13 @@
 
 public class DispenserProviderDTO
 {
-    /// <summary>
-    /// /
-    /// </summary>
     public int Id { get; set; }
 
     /// <summary>
     /// This field will be set by the administrator during initialization.
     /// </summary>
     public string UserAddress { get; set; } = null!;
+
 
     #region Signature part
 

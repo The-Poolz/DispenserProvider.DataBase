@@ -3,7 +3,11 @@
 public class BuilderDTO
 {
     public int Id { get; set; }
-    public string Parameters { get; set; }
+    public decimal WithdrawalAmount { get; set; }
+    public decimal RefundAmount { get; set; }
+    public DateTime StartTime { get; set; }
+    public decimal FinishTime { get; set; }
+
     public string ProviderAddress { get; set; }
 
     public int TransactionDetailId { get; set; }
