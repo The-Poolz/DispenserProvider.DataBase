@@ -6,7 +6,7 @@ public class BuilderDTO
     public decimal WithdrawalAmount { get; set; }
     public decimal RefundAmount { get; set; }
     public DateTime StartTime { get; set; }
-    public decimal FinishTime { get; set; }
+    public DateTime FinishTime { get; set; }
 
     public string ProviderAddress { get; set; }
 
