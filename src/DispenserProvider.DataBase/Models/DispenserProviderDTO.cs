@@ -9,20 +9,9 @@ public class DispenserProviderDTO
     /// </summary>
     public string UserAddress { get; set; } = null!;
 
+    public string? Signature { get; set; }
+    public virtual SignatureDTO UserSignature { get; set; }
 
-    #region Signature part
-
-    public string Signature { get; set; }
-    public DateTime ValidFrom { get; set; }
-    public DateTime ValidUntil { get; set; }
-    public bool IsRefund { get; set; }
-
-    // or
-
-    //public string? UserSignature { get; set; }
-    //public virtual SignatureDTO Signature { get; set; }
-
-    #endregion
 
     public int WithdrawalDetailId { get; set; }
     public virtual TransactionDetailDTO WithdrawalDetail { get; set; }
