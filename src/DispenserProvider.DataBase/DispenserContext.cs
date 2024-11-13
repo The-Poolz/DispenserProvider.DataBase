@@ -40,8 +40,9 @@ public class DispenserContext : DbContext
 
             entity.HasOne(e => e.UserSignature)
                 .WithOne(e => e.DispenserProvider)
-                .HasForeignKey<SignatureDTO>(e => e.Signature)
-                .IsRequired(false);
+                .HasForeignKey<DispenserProviderDTO>(e => e.Signature)
+                .IsRequired(false)
+                .OnDelete(DeleteBehavior.Restrict);
 
             entity.HasOne(e => e.WithdrawalDetail)
                 .WithOne(e => e.DispenserProvider)
@@ -67,11 +68,6 @@ public class DispenserContext : DbContext
         modelBuilder.Entity<SignatureDTO>(entity =>
         {
             entity.HasKey(e => e.Signature);
-
-            entity.HasOne(e => e.DispenserProvider)
-                .WithOne(e => e.UserSignature)
-                .HasForeignKey<SignatureDTO>(e => e.Signature)
-                .OnDelete(DeleteBehavior.Cascade);
         });
 
         modelBuilder.Entity<BuilderDTO>(entity =>

@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DispenserProvider.DataBase.Migrations
 {
     [DbContext(typeof(DispenserContext))]
-    [Migration("20241112195244_Init")]
+    [Migration("20241113143112_Init")]
     partial class Init
     {
         /// <inheritdoc />
@@ -76,6 +76,10 @@ namespace DispenserProvider.DataBase.Migrations
                         .IsUnique()
                         .HasFilter("[RefundDetailId] IS NOT NULL");
 
+                    b.HasIndex("Signature")
+                        .IsUnique()
+                        .HasFilter("[Signature] IS NOT NULL");
+
                     b.HasIndex("WithdrawalDetailId")
                         .IsUnique();
 
@@ -112,10 +116,6 @@ namespace DispenserProvider.DataBase.Migrations
                     b.Property<long>("ChainId")
                         .HasColumnType("bigint");
 
-                    b.Property<string>("DispenserProviderId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<long>("PoolId")
                         .HasColumnType("bigint");
 
@@ -142,6 +142,11 @@ namespace DispenserProvider.DataBase.Migrations
                         .HasForeignKey("DispenserProvider.DataBase.Models.DispenserProviderDTO", "RefundDetailId")
                         .OnDelete(DeleteBehavior.Restrict);
 
+                    b.HasOne("DispenserProvider.DataBase.Models.SignatureDTO", "UserSignature")
+                        .WithOne("DispenserProvider")
+                        .HasForeignKey("DispenserProvider.DataBase.Models.DispenserProviderDTO", "Signature")
+                        .OnDelete(DeleteBehavior.Restrict);
+
                     b.HasOne("DispenserProvider.DataBase.Models.TransactionDetailDTO", "WithdrawalDetail")
                         .WithOne("DispenserProvider")
                         .HasForeignKey("DispenserProvider.DataBase.Models.DispenserProviderDTO", "WithdrawalDetailId")
@@ -150,22 +155,14 @@ namespace DispenserProvider.DataBase.Migrations
 
                     b.Navigation("RefundDetail");
 
+                    b.Navigation("UserSignature");
+
                     b.Navigation("WithdrawalDetail");
                 });
 
             modelBuilder.Entity("DispenserProvider.DataBase.Models.SignatureDTO", b =>
                 {
-                    b.HasOne("DispenserProvider.DataBase.Models.DispenserProviderDTO", "DispenserProvider")
-                        .WithOne("UserSignature")
-                        .HasForeignKey("DispenserProvider.DataBase.Models.SignatureDTO", "Signature")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.Navigation("DispenserProvider");
-                });
-
-            modelBuilder.Entity("DispenserProvider.DataBase.Models.DispenserProviderDTO", b =>
-                {
-                    b.Navigation("UserSignature")
+                    b.Navigation("DispenserProvider")
                         .IsRequired();
                 });
 

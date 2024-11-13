@@ -12,14 +12,27 @@ namespace DispenserProvider.DataBase.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
+                name: "Signatures",
+                columns: table => new
+                {
+                    Signature = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ValidFrom = table.Column<DateTime>(type: "datetime2(0)", nullable: false),
+                    ValidUntil = table.Column<DateTime>(type: "datetime2(0)", nullable: false),
+                    IsRefund = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Signatures", x => x.Signature);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "TransactionDetails",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ChainId = table.Column<long>(type: "bigint", nullable: false),
-                    PoolId = table.Column<long>(type: "bigint", nullable: false),
-                    DispenserProviderId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                    PoolId = table.Column<long>(type: "bigint", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -62,6 +75,12 @@ namespace DispenserProvider.DataBase.Migrations
                 {
                     table.PrimaryKey("PK_DispenserProvider", x => x.Id);
                     table.ForeignKey(
+                        name: "FK_DispenserProvider_Signatures_Signature",
+                        column: x => x.Signature,
+                        principalTable: "Signatures",
+                        principalColumn: "Signature",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
                         name: "FK_DispenserProvider_TransactionDetails_RefundDetailId",
                         column: x => x.RefundDetailId,
                         principalTable: "TransactionDetails",
@@ -73,26 +92,6 @@ namespace DispenserProvider.DataBase.Migrations
                         principalTable: "TransactionDetails",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Signatures",
-                columns: table => new
-                {
-                    Signature = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    ValidFrom = table.Column<DateTime>(type: "datetime2(0)", nullable: false),
-                    ValidUntil = table.Column<DateTime>(type: "datetime2(0)", nullable: false),
-                    IsRefund = table.Column<bool>(type: "bit", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Signatures", x => x.Signature);
-                    table.ForeignKey(
-                        name: "FK_Signatures_DispenserProvider_Signature",
-                        column: x => x.Signature,
-                        principalTable: "DispenserProvider",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
@@ -108,6 +107,13 @@ namespace DispenserProvider.DataBase.Migrations
                 filter: "[RefundDetailId] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
+                name: "IX_DispenserProvider_Signature",
+                table: "DispenserProvider",
+                column: "Signature",
+                unique: true,
+                filter: "[Signature] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_DispenserProvider_WithdrawalDetailId",
                 table: "DispenserProvider",
                 column: "WithdrawalDetailId",
@@ -121,10 +127,10 @@ namespace DispenserProvider.DataBase.Migrations
                 name: "Builders");
 
             migrationBuilder.DropTable(
-                name: "Signatures");
+                name: "DispenserProvider");
 
             migrationBuilder.DropTable(
-                name: "DispenserProvider");
+                name: "Signatures");
 
             migrationBuilder.DropTable(
                 name: "TransactionDetails");
