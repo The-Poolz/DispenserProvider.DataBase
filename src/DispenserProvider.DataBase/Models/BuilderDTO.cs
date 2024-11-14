@@ -4,7 +4,7 @@ namespace DispenserProvider.DataBase.Models;
 
 public class BuilderDTO
 {
-    public int Id { get; set; }
+    public long Id { get; set; }
 
     [Column(TypeName = "decimal(36,18)")]
     public decimal Amount { get; set; }
@@ -15,6 +15,6 @@ public class BuilderDTO
     [Column(TypeName = "datetime2(0)")]
     public DateTime? FinishTime { get; set; }
 
-    public int TransactionDetailId { get; set; }
+    public long TransactionDetailId { get; set; }
     public virtual TransactionDetailDTO TransactionDetail { get; set; } = null!;
 }

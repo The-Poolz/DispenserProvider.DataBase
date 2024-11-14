@@ -12,13 +12,14 @@ public class DispenserContext : DbContext
     public DispenserContext(DbContextOptions options) : base(options) { }
     public DispenserContext(DbContextOptions<DispenserContext> options) : base(options) { }
 
-    public virtual DbSet<DispenserProviderDTO> DispenserProvider { get; set; } = null!;
+    public virtual DbSet<DispenserDTO> DispenserProvider { get; set; } = null!;
     public virtual DbSet<TransactionDetailDTO> TransactionDetails { get; set; } = null!;
     public virtual DbSet<SignatureDTO> Signatures { get; set; } = null!;
     public virtual DbSet<BuilderDTO> Builders { get; set; } = null!;
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
+        optionsBuilder.UseSqlServer("Data Source=(localdb)\\ProjectModels;Initial Catalog=DispenserProvider;Trust Server Certificate=False;");
         optionsBuilder
             .ConfigureFromActionConnection("DispenserProvider.Migrations")
             .ConfigureFromSecretConnection("DispenserProvider.Migrations");
@@ -28,7 +29,7 @@ public class DispenserContext : DbContext
     {
         base.OnModelCreating(modelBuilder);
 
-        modelBuilder.Entity<DispenserProviderDTO>(entity =>
+        modelBuilder.Entity<DispenserDTO>(entity =>
         {
             entity.HasKey(e => e.Id);
 
@@ -40,18 +41,18 @@ public class DispenserContext : DbContext
 
             entity.HasOne(e => e.UserSignature)
                 .WithOne(e => e.DispenserProvider)
-                .HasForeignKey<DispenserProviderDTO>(e => e.Signature)
+                .HasForeignKey<DispenserDTO>(e => e.Signature)
                 .IsRequired(false)
                 .OnDelete(DeleteBehavior.Restrict);
 
             entity.HasOne(e => e.WithdrawalDetail)
                 .WithOne(e => e.DispenserProvider)
-                .HasForeignKey<DispenserProviderDTO>(e => e.WithdrawalDetailId)
+                .HasForeignKey<DispenserDTO>(e => e.WithdrawalDetailId)
                 .OnDelete(DeleteBehavior.Restrict);
 
             entity.HasOne(e => e.RefundDetail)
                 .WithOne()
-                .HasForeignKey<DispenserProviderDTO>(e => e.RefundDetailId)
+                .HasForeignKey<DispenserDTO>(e => e.RefundDetailId)
                 .OnDelete(DeleteBehavior.Restrict);
         });
 

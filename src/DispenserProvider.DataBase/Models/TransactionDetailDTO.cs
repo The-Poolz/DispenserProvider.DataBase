@@ -2,10 +2,10 @@
 
 public class TransactionDetailDTO
 {
-    public int Id { get; set; }
+    public long Id { get; set; }
     public long ChainId { get; set; }
     public long PoolId { get; set; }
 
     public virtual List<BuilderDTO> Builders { get; set; } = [];
-    public virtual DispenserProviderDTO DispenserProvider { get; set; } = null!;
+    public virtual DispenserDTO DispenserProvider { get; set; } = null!;
 }
