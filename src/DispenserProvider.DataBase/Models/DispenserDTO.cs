@@ -1,4 +1,5 @@
 ﻿using Net.Web3.EthereumWallet;
+using Net.Cryptography.SHA256;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DispenserProvider.DataBase.Models;
@@ -28,6 +29,6 @@ public class DispenserDTO
 
     public DispenserDTO(EthereumAddress userAddress, long chainId, long poolId)
     {
-        Id = $"{userAddress}-{chainId}-{poolId}";
+        Id = $"{userAddress}-{chainId}-{poolId}".ToSha256();
     }
 }
