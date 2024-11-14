@@ -19,7 +19,6 @@ public class DispenserContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        optionsBuilder.UseSqlServer("Data Source=(localdb)\\ProjectModels;Initial Catalog=DispenserProvider;Trust Server Certificate=False;");
         optionsBuilder
             .ConfigureFromActionConnection("DispenserProvider.Migrations")
             .ConfigureFromSecretConnection("DispenserProvider.Migrations");

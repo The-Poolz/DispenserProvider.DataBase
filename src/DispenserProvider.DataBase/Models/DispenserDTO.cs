@@ -5,13 +5,13 @@ namespace DispenserProvider.DataBase.Models;
 
 public class DispenserDTO
 {
-    [Column(TypeName = "nvarchar(450)")]
+    [Column(TypeName = "nvarchar(64)")]
     public string Id { get; set; } = null!;
 
     [Column(TypeName = "nvarchar(42)")]
     public string UserAddress { get; set; } = null!;
 
-    [Column(TypeName = "nvarchar(450)")]
+    [Column(TypeName = "nvarchar(64)")]
     public string? Signature { get; set; }
     public virtual SignatureDTO UserSignature { get; set; } = null!;
 
