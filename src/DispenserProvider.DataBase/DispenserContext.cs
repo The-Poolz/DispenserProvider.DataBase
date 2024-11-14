@@ -12,7 +12,7 @@ public class DispenserContext : DbContext
     public DispenserContext(DbContextOptions options) : base(options) { }
     public DispenserContext(DbContextOptions<DispenserContext> options) : base(options) { }
 
-    public virtual DbSet<DispenserDTO> DispenserProvider { get; set; } = null!;
+    public virtual DbSet<DispenserDTO> Dispenser { get; set; } = null!;
     public virtual DbSet<TransactionDetailDTO> TransactionDetails { get; set; } = null!;
     public virtual DbSet<SignatureDTO> Signatures { get; set; } = null!;
     public virtual DbSet<BuilderDTO> Builders { get; set; } = null!;
