@@ -15,5 +15,5 @@ public class SignatureDTO
 
     public bool IsRefund { get; set; }
 
-    public virtual DispenserDTO DispenserProvider { get; set; } = null!;
+    public virtual DispenserDTO Dispenser { get; set; } = null!;
 }

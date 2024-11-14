@@ -39,13 +39,13 @@ public class DispenserContext : DbContext
                 );
 
             entity.HasOne(e => e.UserSignature)
-                .WithOne(e => e.DispenserProvider)
+                .WithOne(e => e.Dispenser)
                 .HasForeignKey<DispenserDTO>(e => e.Signature)
                 .IsRequired(false)
                 .OnDelete(DeleteBehavior.Restrict);
 
             entity.HasOne(e => e.WithdrawalDetail)
-                .WithOne(e => e.DispenserProvider)
+                .WithOne(e => e.Dispenser)
                 .HasForeignKey<DispenserDTO>(e => e.WithdrawalDetailId)
                 .OnDelete(DeleteBehavior.Restrict);
 
