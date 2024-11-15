@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DispenserProvider.DataBase.Migrations
 {
     [DbContext(typeof(DispenserContext))]
-    [Migration("20241115113353_Init")]
+    [Migration("20241115132225_Init")]
     partial class Init
     {
         /// <inheritdoc />
@@ -56,6 +56,9 @@ namespace DispenserProvider.DataBase.Migrations
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(64)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
 
                     b.Property<string>("LogSignature")
                         .IsRequired()

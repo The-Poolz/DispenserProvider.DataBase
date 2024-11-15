@@ -81,6 +81,7 @@ namespace DispenserProvider.DataBase.Migrations
                     UserAddress = table.Column<string>(type: "nvarchar(42)", nullable: false),
                     RefundFinishTime = table.Column<DateTime>(type: "datetime2(0)", nullable: false),
                     Signature = table.Column<string>(type: "nvarchar(132)", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     WithdrawalDetailId = table.Column<long>(type: "bigint", nullable: false),
                     RefundDetailId = table.Column<long>(type: "bigint", nullable: true),
                     LogSignature = table.Column<string>(type: "nvarchar(132)", nullable: false)

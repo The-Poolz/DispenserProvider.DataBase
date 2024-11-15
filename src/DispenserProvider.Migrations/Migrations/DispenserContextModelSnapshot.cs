@@ -54,6 +54,9 @@ namespace DispenserProvider.DataBase.Migrations
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(64)");
 
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
                     b.Property<string>("LogSignature")
                         .IsRequired()
                         .HasColumnType("nvarchar(132)");
