@@ -25,6 +25,8 @@ public class DispenserDTO
     public long? RefundDetailId { get; set; }
     public virtual TransactionDetailDTO? RefundDetail { get; set; }
 
+    public virtual LogDTO Log { get; set; } = null!;
+
     public DispenserDTO() { }
 
     public DispenserDTO(EthereumAddress userAddress, long chainId, long poolId)

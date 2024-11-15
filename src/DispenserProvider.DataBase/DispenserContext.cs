@@ -16,6 +16,7 @@ public class DispenserContext : DbContext
     public virtual DbSet<TransactionDetailDTO> TransactionDetails { get; set; } = null!;
     public virtual DbSet<SignatureDTO> Signatures { get; set; } = null!;
     public virtual DbSet<BuilderDTO> Builders { get; set; } = null!;
+    public virtual DbSet<LogDTO> Logs { get; set; } = null!;
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
