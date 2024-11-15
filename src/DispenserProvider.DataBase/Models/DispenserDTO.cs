@@ -19,6 +19,8 @@ public class DispenserDTO
     public string? Signature { get; set; }
     public virtual SignatureDTO UserSignature { get; set; } = null!;
 
+    public bool IsDeleted { get; set; } = false;
+
     public long WithdrawalDetailId { get; set; }
     public virtual TransactionDetailDTO WithdrawalDetail { get; set; } = null!;
 
