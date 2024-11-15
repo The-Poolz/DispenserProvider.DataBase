@@ -57,8 +57,11 @@ namespace DispenserProvider.DataBase.Migrations
                     b.Property<long?>("RefundDetailId")
                         .HasColumnType("bigint");
 
+                    b.Property<DateTime>("RefundFinishTime")
+                        .HasColumnType("datetime2(0)");
+
                     b.Property<string>("Signature")
-                        .HasColumnType("nvarchar(64)");
+                        .HasColumnType("nvarchar(66)");
 
                     b.Property<string>("UserAddress")
                         .IsRequired()
@@ -86,7 +89,7 @@ namespace DispenserProvider.DataBase.Migrations
             modelBuilder.Entity("DispenserProvider.DataBase.Models.SignatureDTO", b =>
                 {
                     b.Property<string>("Signature")
-                        .HasColumnType("nvarchar(64)");
+                        .HasColumnType("nvarchar(66)");
 
                     b.Property<bool>("IsRefund")
                         .HasColumnType("bit");
@@ -140,12 +143,12 @@ namespace DispenserProvider.DataBase.Migrations
                         .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("DispenserProvider.DataBase.Models.SignatureDTO", "UserSignature")
-                        .WithOne("DispenserProvider")
+                        .WithOne("Dispenser")
                         .HasForeignKey("DispenserProvider.DataBase.Models.DispenserDTO", "Signature")
                         .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("DispenserProvider.DataBase.Models.TransactionDetailDTO", "WithdrawalDetail")
-                        .WithOne("DispenserProvider")
+                        .WithOne("Dispenser")
                         .HasForeignKey("DispenserProvider.DataBase.Models.DispenserDTO", "WithdrawalDetailId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
@@ -159,7 +162,7 @@ namespace DispenserProvider.DataBase.Migrations
 
             modelBuilder.Entity("DispenserProvider.DataBase.Models.SignatureDTO", b =>
                 {
-                    b.Navigation("DispenserProvider")
+                    b.Navigation("Dispenser")
                         .IsRequired();
                 });
 
@@ -167,7 +170,7 @@ namespace DispenserProvider.DataBase.Migrations
                 {
                     b.Navigation("Builders");
 
-                    b.Navigation("DispenserProvider")
+                    b.Navigation("Dispenser")
                         .IsRequired();
                 });
 #pragma warning restore 612, 618

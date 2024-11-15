@@ -15,7 +15,7 @@ namespace DispenserProvider.DataBase.Migrations
                 name: "Signatures",
                 columns: table => new
                 {
-                    Signature = table.Column<string>(type: "nvarchar(64)", nullable: false),
+                    Signature = table.Column<string>(type: "nvarchar(66)", nullable: false),
                     ValidFrom = table.Column<DateTime>(type: "datetime2(0)", nullable: false),
                     ValidUntil = table.Column<DateTime>(type: "datetime2(0)", nullable: false),
                     IsRefund = table.Column<bool>(type: "bit", nullable: false)
@@ -67,7 +67,8 @@ namespace DispenserProvider.DataBase.Migrations
                 {
                     Id = table.Column<string>(type: "nvarchar(64)", nullable: false),
                     UserAddress = table.Column<string>(type: "nvarchar(42)", nullable: false),
-                    Signature = table.Column<string>(type: "nvarchar(64)", nullable: true),
+                    RefundFinishTime = table.Column<DateTime>(type: "datetime2(0)", nullable: false),
+                    Signature = table.Column<string>(type: "nvarchar(66)", nullable: true),
                     WithdrawalDetailId = table.Column<long>(type: "bigint", nullable: false),
                     RefundDetailId = table.Column<long>(type: "bigint", nullable: true)
                 },
