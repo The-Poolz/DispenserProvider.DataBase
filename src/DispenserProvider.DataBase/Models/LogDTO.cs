@@ -4,7 +4,7 @@ namespace DispenserProvider.DataBase.Models;
 
 public class LogDTO
 {
-    [Column(TypeName = "nvarchar(66)")]
+    [Column(TypeName = "nvarchar(132)")]
     public string Signature { get; set; } = null!;
 
     [Column(TypeName = "datetime2(0)")]

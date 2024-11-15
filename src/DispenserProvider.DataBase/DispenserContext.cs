@@ -54,6 +54,11 @@ public class DispenserContext : DbContext
                 .WithOne()
                 .HasForeignKey<DispenserDTO>(e => e.RefundDetailId)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            entity.HasOne(e => e.Log)
+                .WithMany(e => e.Dispenser)
+                .HasForeignKey(e => e.LogSignature)
+                .OnDelete(DeleteBehavior.Cascade);
         });
 
         modelBuilder.Entity<TransactionDetailDTO>(entity =>
@@ -78,6 +83,16 @@ public class DispenserContext : DbContext
             entity.HasOne(e => e.TransactionDetail)
                 .WithMany(e => e.Builders)
                 .HasForeignKey(e => e.TransactionDetailId)
+                .OnDelete(DeleteBehavior.Cascade);
+        });
+
+        modelBuilder.Entity<LogDTO>(entity =>
+        {
+            entity.HasKey(e => e.Signature);
+
+            entity.HasMany(e => e.Dispenser)
+                .WithOne(e => e.Log)
+                .HasForeignKey(e => e.LogSignature)
                 .OnDelete(DeleteBehavior.Cascade);
         });
     }

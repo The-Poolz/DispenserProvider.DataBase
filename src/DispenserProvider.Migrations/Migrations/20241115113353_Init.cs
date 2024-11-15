@@ -12,10 +12,22 @@ namespace DispenserProvider.DataBase.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
+                name: "Logs",
+                columns: table => new
+                {
+                    Signature = table.Column<string>(type: "nvarchar(132)", nullable: false),
+                    CreationTime = table.Column<DateTime>(type: "datetime2(0)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Logs", x => x.Signature);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Signatures",
                 columns: table => new
                 {
-                    Signature = table.Column<string>(type: "nvarchar(66)", nullable: false),
+                    Signature = table.Column<string>(type: "nvarchar(132)", nullable: false),
                     ValidFrom = table.Column<DateTime>(type: "datetime2(0)", nullable: false),
                     ValidUntil = table.Column<DateTime>(type: "datetime2(0)", nullable: false),
                     IsRefund = table.Column<bool>(type: "bit", nullable: false)
@@ -68,13 +80,20 @@ namespace DispenserProvider.DataBase.Migrations
                     Id = table.Column<string>(type: "nvarchar(64)", nullable: false),
                     UserAddress = table.Column<string>(type: "nvarchar(42)", nullable: false),
                     RefundFinishTime = table.Column<DateTime>(type: "datetime2(0)", nullable: false),
-                    Signature = table.Column<string>(type: "nvarchar(66)", nullable: true),
+                    Signature = table.Column<string>(type: "nvarchar(132)", nullable: true),
                     WithdrawalDetailId = table.Column<long>(type: "bigint", nullable: false),
-                    RefundDetailId = table.Column<long>(type: "bigint", nullable: true)
+                    RefundDetailId = table.Column<long>(type: "bigint", nullable: true),
+                    LogSignature = table.Column<string>(type: "nvarchar(132)", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Dispenser", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Dispenser_Logs_LogSignature",
+                        column: x => x.LogSignature,
+                        principalTable: "Logs",
+                        principalColumn: "Signature",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Dispenser_Signatures_Signature",
                         column: x => x.Signature,
@@ -99,6 +118,11 @@ namespace DispenserProvider.DataBase.Migrations
                 name: "IX_Builders_TransactionDetailId",
                 table: "Builders",
                 column: "TransactionDetailId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Dispenser_LogSignature",
+                table: "Dispenser",
+                column: "LogSignature");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Dispenser_RefundDetailId",
@@ -129,6 +153,9 @@ namespace DispenserProvider.DataBase.Migrations
 
             migrationBuilder.DropTable(
                 name: "Dispenser");
+
+            migrationBuilder.DropTable(
+                name: "Logs");
 
             migrationBuilder.DropTable(
                 name: "Signatures");

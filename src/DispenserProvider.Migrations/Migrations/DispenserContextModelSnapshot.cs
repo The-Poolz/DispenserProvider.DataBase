@@ -54,6 +54,10 @@ namespace DispenserProvider.DataBase.Migrations
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(64)");
 
+                    b.Property<string>("LogSignature")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(132)");
+
                     b.Property<long?>("RefundDetailId")
                         .HasColumnType("bigint");
 
@@ -61,7 +65,7 @@ namespace DispenserProvider.DataBase.Migrations
                         .HasColumnType("datetime2(0)");
 
                     b.Property<string>("Signature")
-                        .HasColumnType("nvarchar(66)");
+                        .HasColumnType("nvarchar(132)");
 
                     b.Property<string>("UserAddress")
                         .IsRequired()
@@ -71,6 +75,8 @@ namespace DispenserProvider.DataBase.Migrations
                         .HasColumnType("bigint");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("LogSignature");
 
                     b.HasIndex("RefundDetailId")
                         .IsUnique()
@@ -86,10 +92,23 @@ namespace DispenserProvider.DataBase.Migrations
                     b.ToTable("Dispenser");
                 });
 
+            modelBuilder.Entity("DispenserProvider.DataBase.Models.LogDTO", b =>
+                {
+                    b.Property<string>("Signature")
+                        .HasColumnType("nvarchar(132)");
+
+                    b.Property<DateTime>("CreationTime")
+                        .HasColumnType("datetime2(0)");
+
+                    b.HasKey("Signature");
+
+                    b.ToTable("Logs");
+                });
+
             modelBuilder.Entity("DispenserProvider.DataBase.Models.SignatureDTO", b =>
                 {
                     b.Property<string>("Signature")
-                        .HasColumnType("nvarchar(66)");
+                        .HasColumnType("nvarchar(132)");
 
                     b.Property<bool>("IsRefund")
                         .HasColumnType("bit");
@@ -137,6 +156,12 @@ namespace DispenserProvider.DataBase.Migrations
 
             modelBuilder.Entity("DispenserProvider.DataBase.Models.DispenserDTO", b =>
                 {
+                    b.HasOne("DispenserProvider.DataBase.Models.LogDTO", "Log")
+                        .WithMany("Dispenser")
+                        .HasForeignKey("LogSignature")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("DispenserProvider.DataBase.Models.TransactionDetailDTO", "RefundDetail")
                         .WithOne()
                         .HasForeignKey("DispenserProvider.DataBase.Models.DispenserDTO", "RefundDetailId")
@@ -153,11 +178,18 @@ namespace DispenserProvider.DataBase.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.Navigation("Log");
+
                     b.Navigation("RefundDetail");
 
                     b.Navigation("UserSignature");
 
                     b.Navigation("WithdrawalDetail");
+                });
+
+            modelBuilder.Entity("DispenserProvider.DataBase.Models.LogDTO", b =>
+                {
+                    b.Navigation("Dispenser");
                 });
 
             modelBuilder.Entity("DispenserProvider.DataBase.Models.SignatureDTO", b =>
