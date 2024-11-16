@@ -1,5 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
-
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
@@ -7,7 +6,6 @@
     <Version>1.0.0</Version>
     <PackageReleaseNotes>https://github.com/The-Poolz/DispenserProvider.DataBase/releases/tag/v1.0.0-prod</PackageReleaseNotes>
   </PropertyGroup>
-
   <ItemGroup>
     <PackageReference Include="ConfiguredSqlConnection" Version="1.2.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.8">
@@ -17,5 +15,4 @@
     <PackageReference Include="Net.Cryptography.SHA256" Version="1.1.0" />
     <PackageReference Include="Net.Web3.EthereumWallet" Version="1.1.1" />
   </ItemGroup>
-
 </Project>
