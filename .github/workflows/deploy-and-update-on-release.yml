@@ -1,0 +1,95 @@
+name: Deploy and Update on Release
+on:
+  release:
+    types:
+      - published
+permissions:
+  packages: write
+  contents: write
+  pull-requests: write
+
+jobs:
+  deploy_and_update:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: master
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Build the project
+        run: dotnet build
+
+      - name: Get Release Info
+        id: get_release_info
+        shell: bash
+        run: |
+          TAG="${{ github.event.release.tag_name }}"
+          VERSION=${TAG#v}
+          VERSION=${VERSION%%-*}
+          echo "TAG=$TAG" >> $GITHUB_ENV
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+          echo "Version extracted: $VERSION"
+          if [[ "$TAG" == *"-stage"* ]]; then
+            echo "CONFIGUREDSQLCONNECTION_ACTION_CONNECTION=${{ secrets.PART_OF_CONNECTION }}${{ secrets.STAGE_DB_NAME }}" >> $GITHUB_ENV
+          else
+            echo "CONFIGUREDSQLCONNECTION_ACTION_CONNECTION=${{ secrets.PART_OF_CONNECTION }}${{ secrets.PROD_DB_NAME }}" >> $GITHUB_ENV
+          fi
+
+      - name: Update .csproj with version and release notes
+        if: contains(env.TAG, '-stage')
+        shell: pwsh
+        run: |
+          $version = "${{ env.VERSION }}"
+          $tag = "${{ env.TAG }}"
+          $repository = "${{ github.repository }}"
+          Write-Host "Updating .csproj with version $version and PackageReleaseNotes"
+          [xml]$csproj = Get-Content -Path ./src/DispenserProvider.DataBase/DispenserProvider.DataBase.csproj
+          $csproj.Project.PropertyGroup.Version = $version
+          $releaseNotes = "https://github.com/$repository/releases/tag/v$version-prod"
+          $csproj.Project.PropertyGroup.PackageReleaseNotes = $releaseNotes
+          $csproj.Save("$(PWD)/src/DispenserProvider.DataBase/DispenserProvider.DataBase.csproj")
+
+      - name: Create Pull Request
+        if: contains(env.TAG, '-stage')
+        id: create_pr
+        uses: peter-evans/create-pull-request@v4
+        with:
+          commit-message: Update project version and release notes
+          title: "Update project version to ${{ env.VERSION }}"
+          body: "This PR updates the .csproj project version to ${{ env.VERSION }} and updates package release notes."
+          branch: "update-version-${{ env.VERSION }}"
+          delete-branch: true
+          add-paths: ./src/DispenserProvider.DataBase/DispenserProvider.DataBase.csproj
+
+      - name: Merge Pull Request
+        if: contains(env.TAG, '-stage') && steps.create_pr.outputs.pull-request-number
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          pr_number="${{ steps.create_pr.outputs.pull-request-number }}"
+          echo "pr_number=$pr_number"
+          curl \
+            -X PUT \
+            -H "Authorization: token $GITHUB_TOKEN" \
+            -H "Accept: application/vnd.github.v3+json" \
+            "https://api.github.com/repos/${{ github.repository }}/pulls/$pr_number/merge" \
+            -d '{"merge_method": "squash"}'
+
+      - name: Deploy EF Core Migrations
+        run: |
+          dotnet tool install --global dotnet-ef --version 8.0.0
+          dotnet tool restore
+          dotnet ef database update -c DispenserContext -p ./src/DispenserProvider.Migrations/DispenserProvider.Migrations.csproj -s ./src/DispenserProvider.Migrations/DispenserProvider.Migrations.csproj
+
+      - name: Package and Push NuGet Package to GitHub Packages
+        if: contains(env.TAG, '-prod')
+        run: |
+          dotnet pack ./src/DispenserProvider.DataBase/DispenserProvider.DataBase.csproj --configuration Release --output nupkg/
+          nuget push nupkg/*.nupkg -Source https://nuget.pkg.github.com/The-Poolz/index.json -ApiKey ${{ secrets.GITHUB_TOKEN }}
