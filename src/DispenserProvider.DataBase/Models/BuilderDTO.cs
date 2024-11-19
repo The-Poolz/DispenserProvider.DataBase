@@ -6,6 +6,9 @@ public class BuilderDTO
 {
     public long Id { get; set; }
 
+    [Column(TypeName = "nvarchar(42)")]
+    public string ProviderAddress { get; set; } = null!;
+
     [Column(TypeName = "decimal(36,18)")]
     public decimal Amount { get; set; }
 
