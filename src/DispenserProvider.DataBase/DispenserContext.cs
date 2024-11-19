@@ -80,6 +80,12 @@ public class DispenserContext : DbContext
         {
             entity.HasKey(e => e.Id);
 
+            entity.Property(x => x.ProviderAddress)
+                .HasConversion(
+                    x => x.ConvertToChecksumAddress(null),
+                    x => new EthereumAddress(x)
+                );
+
             entity.HasOne(e => e.TransactionDetail)
                 .WithMany(e => e.Builders)
                 .HasForeignKey(e => e.TransactionDetailId)
