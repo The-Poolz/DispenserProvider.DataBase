@@ -9,7 +9,6 @@ namespace DispenserProvider.DataBase;
 public class DispenserContext : DbContext
 {
     public DispenserContext() { }
-    public DispenserContext(DbContextOptions options) : base(options) { }
     public DispenserContext(DbContextOptions<DispenserContext> options) : base(options) { }
 
     public virtual DbSet<DispenserDTO> Dispenser { get; set; } = null!;
