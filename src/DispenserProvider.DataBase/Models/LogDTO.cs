@@ -10,5 +10,6 @@ public class LogDTO
     [Column(TypeName = "datetime2(0)")]
     public DateTime CreationTime { get; set; }
 
-    public virtual List<DispenserDTO> Dispenser { get; set; } = null!;
+    public virtual List<DispenserDTO> CreationDispensers { get; set; } = [];
+    public virtual List<DispenserDTO> DeletionDispensers { get; set; } = [];
 }
