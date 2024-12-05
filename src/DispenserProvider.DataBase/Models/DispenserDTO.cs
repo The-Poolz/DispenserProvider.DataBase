@@ -35,6 +35,11 @@ public class DispenserDTO
 
     public DispenserDTO(EthereumAddress userAddress, long chainId, long poolId)
     {
-        Id = $"{userAddress}-{chainId}-{poolId}".ToSha256();
+        Id = GenerateId(userAddress, chainId, poolId);
+    }
+
+    public static string GenerateId(EthereumAddress userAddress, long chainId, long poolId)
+    {
+        return $"{userAddress}-{chainId}-{poolId}".ToSha256();
     }
 }
