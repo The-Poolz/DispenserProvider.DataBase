@@ -15,6 +15,8 @@ public class DispenserDTO
     [Column(TypeName = "datetime2(0)")]
     public DateTime RefundFinishTime { get; set; }
 
+    public int MessageIndex { get; set; }
+
     [Column(TypeName = "nvarchar(132)")]
     public string? Signature { get; set; }
     public virtual SignatureDTO UserSignature { get; set; } = null!;
