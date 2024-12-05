@@ -54,9 +54,14 @@ public class DispenserContext : DbContext
                 .HasForeignKey<DispenserDTO>(e => e.RefundDetailId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            entity.HasOne(e => e.Log)
-                .WithMany(e => e.Dispenser)
-                .HasForeignKey(e => e.LogSignature)
+            entity.HasOne(e => e.CreationLog)
+                .WithMany(e => e.CreationDispensers)
+                .HasForeignKey(e => e.CreationLogSignature)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            entity.HasOne(e => e.DeletionLog)
+                .WithMany(e => e.DeletionDispensers)
+                .HasForeignKey(e => e.DeletionLogSignature)
                 .OnDelete(DeleteBehavior.Cascade);
         });
 
@@ -95,9 +100,14 @@ public class DispenserContext : DbContext
         {
             entity.HasKey(e => e.Signature);
 
-            entity.HasMany(e => e.Dispenser)
-                .WithOne(e => e.Log)
-                .HasForeignKey(e => e.LogSignature)
+            entity.HasMany(e => e.CreationDispensers)
+                .WithOne(e => e.CreationLog)
+                .HasForeignKey(e => e.CreationLogSignature)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            entity.HasMany(e => e.DeletionDispensers)
+                .WithOne(e => e.DeletionLog)
+                .HasForeignKey(e => e.DeletionLogSignature)
                 .OnDelete(DeleteBehavior.Cascade);
         });
     }
