@@ -53,7 +53,7 @@ namespace DispenserProvider.DataBase.Migrations
                 column: "DeletionLogSignature",
                 principalTable: "Logs",
                 principalColumn: "Signature",
-                onDelete: ReferentialAction.Cascade);
+                onDelete: ReferentialAction.Restrict);
         }
 
         /// <inheritdoc />

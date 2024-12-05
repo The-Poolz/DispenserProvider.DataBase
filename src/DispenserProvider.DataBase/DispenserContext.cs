@@ -62,7 +62,7 @@ public class DispenserContext : DbContext
             entity.HasOne(e => e.DeletionLog)
                 .WithMany(e => e.DeletionDispensers)
                 .HasForeignKey(e => e.DeletionLogSignature)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.Restrict);
         });
 
         modelBuilder.Entity<TransactionDetailDTO>(entity =>
@@ -108,7 +108,7 @@ public class DispenserContext : DbContext
             entity.HasMany(e => e.DeletionDispensers)
                 .WithOne(e => e.DeletionLog)
                 .HasForeignKey(e => e.DeletionLogSignature)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.Restrict);
         });
     }
 }

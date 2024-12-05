@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DispenserProvider.DataBase.Migrations
 {
     [DbContext(typeof(DispenserContext))]
-    [Migration("20241205134947_Instead-Of-IsDeleted-Use-Another-One-LogDTO")]
+    [Migration("20241205140022_Instead-Of-IsDeleted-Use-Another-One-LogDTO")]
     partial class InsteadOfIsDeletedUseAnotherOneLogDTO
     {
         /// <inheritdoc />
@@ -177,7 +177,7 @@ namespace DispenserProvider.DataBase.Migrations
                     b.HasOne("DispenserProvider.DataBase.Models.LogDTO", "DeletionLog")
                         .WithMany("DeletionDispensers")
                         .HasForeignKey("DeletionLogSignature")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("DispenserProvider.DataBase.Models.TransactionDetailDTO", "RefundDetail")
                         .WithOne()

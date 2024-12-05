@@ -174,7 +174,7 @@ namespace DispenserProvider.DataBase.Migrations
                     b.HasOne("DispenserProvider.DataBase.Models.LogDTO", "DeletionLog")
                         .WithMany("DeletionDispensers")
                         .HasForeignKey("DeletionLogSignature")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("DispenserProvider.DataBase.Models.TransactionDetailDTO", "RefundDetail")
                         .WithOne()
