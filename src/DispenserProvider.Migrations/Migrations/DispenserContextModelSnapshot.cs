@@ -53,7 +53,7 @@ namespace DispenserProvider.DataBase.Migrations
 
                     b.HasIndex("TransactionDetailId");
 
-                    b.ToTable("Builders", (string)null);
+                    b.ToTable("Builders");
                 });
 
             modelBuilder.Entity("DispenserProvider.DataBase.Models.DispenserDTO", b =>
@@ -104,7 +104,7 @@ namespace DispenserProvider.DataBase.Migrations
                     b.HasIndex("WithdrawalDetailId")
                         .IsUnique();
 
-                    b.ToTable("Dispenser", (string)null);
+                    b.ToTable("Dispenser");
                 });
 
             modelBuilder.Entity("DispenserProvider.DataBase.Models.LogDTO", b =>
@@ -121,7 +121,7 @@ namespace DispenserProvider.DataBase.Migrations
 
                     b.HasKey("Signature");
 
-                    b.ToTable("Logs", (string)null);
+                    b.ToTable("Logs");
                 });
 
             modelBuilder.Entity("DispenserProvider.DataBase.Models.SignatureDTO", b =>
@@ -140,7 +140,7 @@ namespace DispenserProvider.DataBase.Migrations
 
                     b.HasKey("Signature");
 
-                    b.ToTable("Signatures", (string)null);
+                    b.ToTable("Signatures");
                 });
 
             modelBuilder.Entity("DispenserProvider.DataBase.Models.TransactionDetailDTO", b =>
@@ -159,7 +159,7 @@ namespace DispenserProvider.DataBase.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("TransactionDetails", (string)null);
+                    b.ToTable("TransactionDetails");
                 });
 
             modelBuilder.Entity("DispenserProvider.DataBase.Models.BuilderDTO", b =>
