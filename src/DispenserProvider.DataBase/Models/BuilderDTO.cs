@@ -18,8 +18,6 @@ public class BuilderDTO
     [Column(TypeName = "datetime2(0)")]
     public DateTime? FinishTime { get; set; }
 
-    public int MessageIndex { get; set; }
-
     public long TransactionDetailId { get; set; }
     public virtual TransactionDetailDTO TransactionDetail { get; set; } = null!;
 }
