@@ -47,12 +47,12 @@ public class DispenserContext : DbContext
                 .OnDelete(DeleteBehavior.Restrict);
 
             entity.HasOne(e => e.WithdrawalDetail)
-                .WithOne(e => e.Dispenser)
+                .WithOne(e => e.WithdrawalDispenser)
                 .HasForeignKey<DispenserDTO>(e => e.WithdrawalDetailId)
                 .OnDelete(DeleteBehavior.Restrict);
 
             entity.HasOne(e => e.RefundDetail)
-                .WithOne()
+                .WithOne(e => e.RefundDispenser)
                 .HasForeignKey<DispenserDTO>(e => e.RefundDetailId)
                 .OnDelete(DeleteBehavior.Restrict);
 

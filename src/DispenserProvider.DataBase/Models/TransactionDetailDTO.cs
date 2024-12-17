@@ -7,5 +7,6 @@ public class TransactionDetailDTO
     public long PoolId { get; set; }
 
     public virtual List<BuilderDTO> Builders { get; set; } = [];
-    public virtual DispenserDTO Dispenser { get; set; } = null!;
+    public virtual DispenserDTO WithdrawalDispenser { get; set; } = null!;
+    public virtual DispenserDTO RefundDispenser { get; set; } = null!;
 }
