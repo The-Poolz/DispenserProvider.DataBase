@@ -13,7 +13,7 @@ public class DispenserDTO
     public string UserAddress { get; set; } = null!;
 
     [Column(TypeName = "datetime2(0)")]
-    public DateTime RefundFinishTime { get; set; }
+    public DateTime? RefundFinishTime { get; set; }
 
     [Column(TypeName = "nvarchar(132)")]
     public string? Signature { get; set; }
