@@ -40,10 +40,9 @@ public class DispenserContext : DbContext
                     x => new EthereumAddress(x)
                 );
 
-            entity.HasOne(e => e.UserSignature)
+            entity.HasMany(e => e.UserSignatures)
                 .WithOne(e => e.Dispenser)
-                .HasForeignKey<DispenserDTO>(e => e.Signature)
-                .IsRequired(false)
+                .HasForeignKey(e => e.DispenserId)
                 .OnDelete(DeleteBehavior.Restrict);
 
             entity.HasOne(e => e.WithdrawalDetail)
