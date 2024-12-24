@@ -15,5 +15,7 @@ public class SignatureDTO
 
     public bool IsRefund { get; set; }
 
+    [Column(TypeName = "nvarchar(64)")]
+    public string DispenserId { get; set; } = null!;
     public virtual DispenserDTO Dispenser { get; set; } = null!;
 }
