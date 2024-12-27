@@ -7,6 +7,7 @@ public class TakenTrackDTO
 {
     public long Id { get; set; }
 
+    [Column(TypeName = "nvarchar(32)")]
     public TakenType Taken { get; set; }
 
     [Column(TypeName = "nvarchar(64)")]
