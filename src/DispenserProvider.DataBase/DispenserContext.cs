@@ -18,6 +18,7 @@ public class DispenserContext : DbContext
     public virtual DbSet<SignatureDTO> Signatures { get; set; } = null!;
     public virtual DbSet<BuilderDTO> Builders { get; set; } = null!;
     public virtual DbSet<LogDTO> Logs { get; set; } = null!;
+    public virtual DbSet<TakenTrackDTO> TakenTrack { get; set; } = null!;
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
@@ -112,6 +113,16 @@ public class DispenserContext : DbContext
             entity.HasMany(e => e.DeletionDispensers)
                 .WithOne(e => e.DeletionLog)
                 .HasForeignKey(e => e.DeletionLogSignature)
+                .OnDelete(DeleteBehavior.Restrict);
+        });
+
+        modelBuilder.Entity<TakenTrackDTO>(entity =>
+        {
+            entity.HasKey(e => e.Id);
+
+            entity.HasOne(e => e.Dispenser)
+                .WithOne(e => e.TakenTrack)
+                .HasForeignKey<TakenTrackDTO>(e => e.DispenserId)
                 .OnDelete(DeleteBehavior.Restrict);
         });
     }
