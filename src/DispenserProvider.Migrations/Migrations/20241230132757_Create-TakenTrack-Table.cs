@@ -16,7 +16,7 @@ namespace DispenserProvider.DataBase.Migrations
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Taken = table.Column<string>(type: "nvarchar(32)", nullable: false),
+                    IsRefunded = table.Column<bool>(type: "bit", nullable: false),
                     DispenserId = table.Column<string>(type: "nvarchar(64)", nullable: false)
                 },
                 constraints: table =>

@@ -120,9 +120,6 @@ public class DispenserContext : DbContext
         {
             entity.HasKey(e => e.Id);
 
-            entity.Property(e => e.Taken)
-                .HasConversion(new EnumToStringConverter<TakenType>());
-
             entity.HasOne(e => e.Dispenser)
                 .WithOne(e => e.TakenTrack)
                 .HasForeignKey<TakenTrackDTO>(e => e.DispenserId)

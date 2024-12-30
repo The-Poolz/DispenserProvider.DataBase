@@ -149,9 +149,8 @@ namespace DispenserProvider.DataBase.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(64)");
 
-                    b.Property<string>("Taken")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(32)");
+                    b.Property<bool>("IsRefunded")
+                        .HasColumnType("bit");
 
                     b.HasKey("Id");
 

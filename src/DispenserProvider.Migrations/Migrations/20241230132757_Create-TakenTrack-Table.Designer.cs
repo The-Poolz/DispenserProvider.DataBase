@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DispenserProvider.DataBase.Migrations
 {
     [DbContext(typeof(DispenserContext))]
-    [Migration("20241230085050_Create-TakenTrack-Table")]
+    [Migration("20241230132757_Create-TakenTrack-Table")]
     partial class CreateTakenTrackTable
     {
         /// <inheritdoc />
@@ -152,9 +152,8 @@ namespace DispenserProvider.DataBase.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(64)");
 
-                    b.Property<string>("Taken")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(32)");
+                    b.Property<bool>("IsRefunded")
+                        .HasColumnType("bit");
 
                     b.HasKey("Id");
 
