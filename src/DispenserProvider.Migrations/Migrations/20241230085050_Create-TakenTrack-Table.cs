@@ -10,12 +10,6 @@ namespace DispenserProvider.DataBase.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AddColumn<long>(
-                name: "TakenTrackId",
-                table: "Dispenser",
-                type: "bigint",
-                nullable: true);
-
             migrationBuilder.CreateTable(
                 name: "TakenTrack",
                 columns: table => new
@@ -28,41 +22,26 @@ namespace DispenserProvider.DataBase.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_TakenTrack", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_TakenTrack_Dispenser_DispenserId",
+                        column: x => x.DispenserId,
+                        principalTable: "Dispenser",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Dispenser_TakenTrackId",
-                table: "Dispenser",
-                column: "TakenTrackId",
-                unique: true,
-                filter: "[TakenTrackId] IS NOT NULL");
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_Dispenser_TakenTrack_TakenTrackId",
-                table: "Dispenser",
-                column: "TakenTrackId",
-                principalTable: "TakenTrack",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.Restrict);
+                name: "IX_TakenTrack_DispenserId",
+                table: "TakenTrack",
+                column: "DispenserId",
+                unique: true);
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropForeignKey(
-                name: "FK_Dispenser_TakenTrack_TakenTrackId",
-                table: "Dispenser");
-
             migrationBuilder.DropTable(
                 name: "TakenTrack");
-
-            migrationBuilder.DropIndex(
-                name: "IX_Dispenser_TakenTrackId",
-                table: "Dispenser");
-
-            migrationBuilder.DropColumn(
-                name: "TakenTrackId",
-                table: "Dispenser");
         }
     }
 }

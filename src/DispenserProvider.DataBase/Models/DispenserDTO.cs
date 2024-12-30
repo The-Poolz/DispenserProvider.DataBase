@@ -17,7 +17,6 @@ public class DispenserDTO
 
     public virtual List<SignatureDTO> UserSignatures { get; set; } = [];
 
-    public long? TakenTrackId { get; set; }
     public virtual TakenTrackDTO? TakenTrack { get; set; }
 
     public long WithdrawalDetailId { get; set; }

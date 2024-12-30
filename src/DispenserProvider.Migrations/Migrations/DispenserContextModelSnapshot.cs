@@ -72,9 +72,6 @@ namespace DispenserProvider.DataBase.Migrations
                     b.Property<DateTime?>("RefundFinishTime")
                         .HasColumnType("datetime2(0)");
 
-                    b.Property<long?>("TakenTrackId")
-                        .HasColumnType("bigint");
-
                     b.Property<string>("UserAddress")
                         .IsRequired()
                         .HasColumnType("nvarchar(42)");
@@ -91,10 +88,6 @@ namespace DispenserProvider.DataBase.Migrations
                     b.HasIndex("RefundDetailId")
                         .IsUnique()
                         .HasFilter("[RefundDetailId] IS NOT NULL");
-
-                    b.HasIndex("TakenTrackId")
-                        .IsUnique()
-                        .HasFilter("[TakenTrackId] IS NOT NULL");
 
                     b.HasIndex("WithdrawalDetailId")
                         .IsUnique();
@@ -162,6 +155,9 @@ namespace DispenserProvider.DataBase.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("DispenserId")
+                        .IsUnique();
+
                     b.ToTable("TakenTrack");
                 });
 
@@ -213,11 +209,6 @@ namespace DispenserProvider.DataBase.Migrations
                         .HasForeignKey("DispenserProvider.DataBase.Models.DispenserDTO", "RefundDetailId")
                         .OnDelete(DeleteBehavior.Restrict);
 
-                    b.HasOne("DispenserProvider.DataBase.Models.TakenTrackDTO", "TakenTrack")
-                        .WithOne("Dispenser")
-                        .HasForeignKey("DispenserProvider.DataBase.Models.DispenserDTO", "TakenTrackId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
                     b.HasOne("DispenserProvider.DataBase.Models.TransactionDetailDTO", "WithdrawalDetail")
                         .WithOne("WithdrawalDispenser")
                         .HasForeignKey("DispenserProvider.DataBase.Models.DispenserDTO", "WithdrawalDetailId")
@@ -229,8 +220,6 @@ namespace DispenserProvider.DataBase.Migrations
                     b.Navigation("DeletionLog");
 
                     b.Navigation("RefundDetail");
-
-                    b.Navigation("TakenTrack");
 
                     b.Navigation("WithdrawalDetail");
                 });
@@ -246,8 +235,21 @@ namespace DispenserProvider.DataBase.Migrations
                     b.Navigation("Dispenser");
                 });
 
+            modelBuilder.Entity("DispenserProvider.DataBase.Models.TakenTrackDTO", b =>
+                {
+                    b.HasOne("DispenserProvider.DataBase.Models.DispenserDTO", "Dispenser")
+                        .WithOne("TakenTrack")
+                        .HasForeignKey("DispenserProvider.DataBase.Models.TakenTrackDTO", "DispenserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Dispenser");
+                });
+
             modelBuilder.Entity("DispenserProvider.DataBase.Models.DispenserDTO", b =>
                 {
+                    b.Navigation("TakenTrack");
+
                     b.Navigation("UserSignatures");
                 });
 
@@ -256,12 +258,6 @@ namespace DispenserProvider.DataBase.Migrations
                     b.Navigation("CreationDispensers");
 
                     b.Navigation("DeletionDispensers");
-                });
-
-            modelBuilder.Entity("DispenserProvider.DataBase.Models.TakenTrackDTO", b =>
-                {
-                    b.Navigation("Dispenser")
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("DispenserProvider.DataBase.Models.TransactionDetailDTO", b =>

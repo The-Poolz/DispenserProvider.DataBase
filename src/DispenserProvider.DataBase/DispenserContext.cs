@@ -46,11 +46,6 @@ public class DispenserContext : DbContext
                 .HasForeignKey(e => e.DispenserId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            entity.HasOne(e => e.TakenTrack)
-                .WithOne(e => e.Dispenser)
-                .HasForeignKey<DispenserDTO>(e => e.TakenTrackId)
-                .OnDelete(DeleteBehavior.Restrict);
-
             entity.HasOne(e => e.WithdrawalDetail)
                 .WithOne(e => e.WithdrawalDispenser)
                 .HasForeignKey<DispenserDTO>(e => e.WithdrawalDetailId)
@@ -127,6 +122,11 @@ public class DispenserContext : DbContext
 
             entity.Property(e => e.Taken)
                 .HasConversion(new EnumToStringConverter<TakenType>());
+
+            entity.HasOne(e => e.Dispenser)
+                .WithOne(e => e.TakenTrack)
+                .HasForeignKey<TakenTrackDTO>(e => e.DispenserId)
+                .OnDelete(DeleteBehavior.Restrict);
         });
     }
 }
