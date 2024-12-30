@@ -3,8 +3,6 @@ using Microsoft.EntityFrameworkCore;
 using DispenserProvider.DataBase.Models;
 using ConfiguredSqlConnection.Extensions;
 using Net.Web3.EthereumWallet.Extensions;
-using DispenserProvider.DataBase.Models.Types;
-using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DispenserProvider.DataBase;
 
@@ -101,9 +99,6 @@ public class DispenserContext : DbContext
         modelBuilder.Entity<LogDTO>(entity =>
         {
             entity.HasKey(e => e.Signature);
-
-            entity.Property(e => e.Operation)
-                .HasConversion(new EnumToStringConverter<OperationType>());
 
             entity.HasMany(e => e.CreationDispensers)
                 .WithOne(e => e.CreationLog)
