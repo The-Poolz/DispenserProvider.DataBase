@@ -9,6 +9,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DispenserProvider.DataBase"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DispenserProvider.Migrations", "src\DispenserProvider.Migrations\DispenserProvider.Migrations.csproj", "{F26FDA1F-C901-4066-B3B3-B40218BEA02A}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DispenserProvider.DataBase.Tests", "tests\DispenserProvider.DataBase.Tests\DispenserProvider.DataBase.Tests.csproj", "{3FD4DCA9-6949-4C73-9ED2-59CB7EC250CE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -23,6 +27,10 @@ Global
 		{F26FDA1F-C901-4066-B3B3-B40218BEA02A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F26FDA1F-C901-4066-B3B3-B40218BEA02A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F26FDA1F-C901-4066-B3B3-B40218BEA02A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3FD4DCA9-6949-4C73-9ED2-59CB7EC250CE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3FD4DCA9-6949-4C73-9ED2-59CB7EC250CE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3FD4DCA9-6949-4C73-9ED2-59CB7EC250CE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3FD4DCA9-6949-4C73-9ED2-59CB7EC250CE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -30,6 +38,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{DB872394-C612-4F7C-92DA-61ADF78426AB} = {68A5BA93-31A3-4B66-B412-C69D0F6F92E3}
 		{F26FDA1F-C901-4066-B3B3-B40218BEA02A} = {68A5BA93-31A3-4B66-B412-C69D0F6F92E3}
+		{3FD4DCA9-6949-4C73-9ED2-59CB7EC250CE} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {37040643-5CC3-4A7D-9B80-18B7666E9944}

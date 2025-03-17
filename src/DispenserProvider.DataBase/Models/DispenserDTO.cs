@@ -38,13 +38,28 @@ public class DispenserDTO
 
     public DispenserDTO() { }
 
-    public DispenserDTO(EthereumAddress userAddress, long chainId, long poolId)
+    public DispenserDTO(EthereumAddress userAddress, TransactionDetailDTO withdraw, TransactionDetailDTO? refund)
     {
-        Id = GenerateId(userAddress, chainId, poolId);
+        Id = GenerateId(userAddress, withdraw, refund);
     }
 
-    public static string GenerateId(EthereumAddress userAddress, long chainId, long poolId)
+    public DispenserDTO(EthereumAddress userAddress, long withdrawChainId, long withdrawPoolId, long? refundChainId, long? refundPoolId)
     {
-        return $"{userAddress}-{chainId}-{poolId}".ToSha256();
+        Id = GenerateId(userAddress, withdrawChainId, withdrawPoolId, refundChainId, refundPoolId);
+    }
+
+    public static string GenerateId(EthereumAddress userAddress, TransactionDetailDTO withdraw, TransactionDetailDTO? refund)
+    {
+        return GenerateId(userAddress, withdraw.ChainId, withdraw.PoolId, refund?.ChainId, refund?.PoolId);
+    }
+
+    public static string GenerateId(EthereumAddress userAddress, long withdrawChainId, long withdrawPoolId, long? refundChainId, long? refundPoolId)
+    {
+        return GenerateSourceForId(userAddress, withdrawChainId, withdrawPoolId, refundChainId, refundPoolId).ToSha256();
+    }
+
+    internal static string GenerateSourceForId(EthereumAddress userAddress, long withdrawChainId, long withdrawPoolId, long? refundChainId, long? refundPoolId)
+    {
+        return $"{userAddress}-{withdrawChainId}-{withdrawPoolId}" + (refundChainId.HasValue && refundPoolId.HasValue ? $"-{refundChainId}-{refundPoolId}" : string.Empty);
     }
 }
