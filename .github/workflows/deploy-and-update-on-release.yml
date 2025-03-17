@@ -92,4 +92,4 @@ jobs:
         if: contains(env.TAG, '-prod')
         run: |
           dotnet pack ./src/DispenserProvider.DataBase/DispenserProvider.DataBase.csproj --configuration Release --output nupkg/
-          nuget push nupkg/*.nupkg -Source https://nuget.pkg.github.com/The-Poolz/index.json -ApiKey ${{ secrets.GITHUB_TOKEN }}
+          dotnet nuget push nupkg/*.nupkg -Source https://nuget.pkg.github.com/The-Poolz/index.json -ApiKey ${{ secrets.GITHUB_TOKEN }}
