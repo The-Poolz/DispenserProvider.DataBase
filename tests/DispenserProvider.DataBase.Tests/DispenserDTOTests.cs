@@ -15,10 +15,8 @@ public class DispenserDTOTests
             var userAddress = EthereumAddress.ZeroAddress;
             long withdrawChainId = 56;
             long withdrawPoolId = 1;
-            long? refundChainId = null;
-            long? refundPoolId = null;
 
-            var result = DispenserDTO.GenerateSourceForId(userAddress, withdrawChainId, withdrawPoolId, refundChainId, refundPoolId);
+            var result = DispenserDTO.GenerateSourceForId(userAddress, withdrawChainId, withdrawPoolId);
 
             result.Should().Be($"{userAddress}-{withdrawChainId}-{withdrawPoolId}");
         }

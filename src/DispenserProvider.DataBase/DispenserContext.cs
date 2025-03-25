@@ -33,12 +33,6 @@ public class DispenserContext : DbContext
         {
             entity.HasKey(e => e.Id);
 
-            entity.Property(x => x.UserAddress)
-                .HasConversion(
-                    x => x.ConvertToChecksumAddress(null),
-                    x => new EthereumAddress(x)
-                );
-
             entity.HasMany(e => e.UserSignatures)
                 .WithOne(e => e.Dispenser)
                 .HasForeignKey(e => e.DispenserId)
@@ -67,7 +61,13 @@ public class DispenserContext : DbContext
 
         modelBuilder.Entity<TransactionDetailDTO>(entity =>
         {
-            entity.HasKey(e => e.Id);
+            entity.HasKey(e => new { e.UserAddress, e.ChainId, e.PoolId });
+
+            entity.Property(x => x.UserAddress)
+                .HasConversion(
+                    x => x.ConvertToChecksumAddress(null),
+                    x => new EthereumAddress(x)
+                );
 
             entity.HasMany(e => e.Builders)
                 .WithOne(e => e.TransactionDetail)
