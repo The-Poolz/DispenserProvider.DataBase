@@ -9,13 +9,13 @@ public class DispenserDTO
     [Column(TypeName = "nvarchar(64)")]
     public string Id { get; set; } = null!;
 
-    [Column(TypeName = "nvarchar(42)")]
-    public string UserAddress { get; set; } = null!;
-
     [Column(TypeName = "datetime2(0)")]
     public DateTime? RefundFinishTime { get; set; }
 
     public virtual List<SignatureDTO> UserSignatures { get; set; } = [];
+
+    [NotMapped]
+    public EthereumAddress UserAddress => WithdrawalDetail.UserAddress;
 
     [NotMapped]
     public SignatureDTO? LastUserSignature => UserSignatures.Count <= 0 ? null : UserSignatures.MaxBy(x => x.ValidUntil);
@@ -38,27 +38,27 @@ public class DispenserDTO
 
     public DispenserDTO() { }
 
-    public DispenserDTO(EthereumAddress userAddress, TransactionDetailDTO withdraw, TransactionDetailDTO? refund)
+    public DispenserDTO(TransactionDetailDTO withdraw, TransactionDetailDTO? refund)
     {
-        Id = GenerateId(userAddress, withdraw, refund);
+        Id = GenerateId(withdraw, refund);
     }
 
-    public DispenserDTO(EthereumAddress userAddress, long withdrawChainId, long withdrawPoolId, long? refundChainId, long? refundPoolId)
+    public DispenserDTO(EthereumAddress userAddress, long withdrawChainId, long withdrawPoolId, long? refundChainId = null, long? refundPoolId = null)
     {
         Id = GenerateId(userAddress, withdrawChainId, withdrawPoolId, refundChainId, refundPoolId);
     }
 
-    public static string GenerateId(EthereumAddress userAddress, TransactionDetailDTO withdraw, TransactionDetailDTO? refund)
+    public static string GenerateId(TransactionDetailDTO withdraw, TransactionDetailDTO? refund = null)
     {
-        return GenerateId(userAddress, withdraw.ChainId, withdraw.PoolId, refund?.ChainId, refund?.PoolId);
+        return GenerateId(withdraw.UserAddress, withdraw.ChainId, withdraw.PoolId, refund?.ChainId, refund?.PoolId);
     }
 
-    public static string GenerateId(EthereumAddress userAddress, long withdrawChainId, long withdrawPoolId, long? refundChainId, long? refundPoolId)
+    public static string GenerateId(EthereumAddress userAddress, long withdrawChainId, long withdrawPoolId, long? refundChainId = null, long? refundPoolId = null)
     {
         return GenerateSourceForId(userAddress, withdrawChainId, withdrawPoolId, refundChainId, refundPoolId).ToSha256();
     }
 
-    internal static string GenerateSourceForId(EthereumAddress userAddress, long withdrawChainId, long withdrawPoolId, long? refundChainId, long? refundPoolId)
+    internal static string GenerateSourceForId(EthereumAddress userAddress, long withdrawChainId, long withdrawPoolId, long? refundChainId = null, long? refundPoolId = null)
     {
         return $"{userAddress}-{withdrawChainId}-{withdrawPoolId}" + (refundChainId.HasValue && refundPoolId.HasValue ? $"-{refundChainId}-{refundPoolId}" : string.Empty);
     }
