@@ -15,6 +15,9 @@ public class DispenserDTO
     public virtual List<SignatureDTO> UserSignatures { get; set; } = [];
 
     [NotMapped]
+    public EthereumAddress UserAddress => WithdrawalDetail.UserAddress;
+
+    [NotMapped]
     public SignatureDTO? LastUserSignature => UserSignatures.Count <= 0 ? null : UserSignatures.MaxBy(x => x.ValidUntil);
 
     public virtual TakenTrackDTO? TakenTrack { get; set; }

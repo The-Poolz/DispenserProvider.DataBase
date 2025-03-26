@@ -61,7 +61,10 @@ public class DispenserContext : DbContext
 
         modelBuilder.Entity<TransactionDetailDTO>(entity =>
         {
-            entity.HasKey(e => new { e.UserAddress, e.ChainId, e.PoolId });
+            entity.HasKey(e => e.Id);
+
+            entity.HasIndex(e => new { e.UserAddress, e.ChainId, e.PoolId })
+                .IsUnique();
 
             entity.Property(x => x.UserAddress)
                 .HasConversion(
