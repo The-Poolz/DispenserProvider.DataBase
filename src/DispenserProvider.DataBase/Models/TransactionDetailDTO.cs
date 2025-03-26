@@ -5,7 +5,7 @@ namespace DispenserProvider.DataBase.Models;
 public class TransactionDetailDTO
 {
     [Column(TypeName = "nvarchar(42)")]
-    public string UserAddress { get; set; }
+    public string UserAddress { get; set; } = null!;
     public long ChainId { get; set; }
     public long PoolId { get; set; }
 
