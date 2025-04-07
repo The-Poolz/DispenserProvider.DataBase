@@ -3,8 +3,8 @@
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <Version>1.0.15</Version>
-    <PackageReleaseNotes>https://github.com/The-Poolz/DispenserProvider.DataBase/releases/tag/v1.0.15-prod</PackageReleaseNotes>
+    <Version>1.0.16</Version>
+    <PackageReleaseNotes>https://github.com/The-Poolz/DispenserProvider.DataBase/releases/tag/v1.0.16-prod</PackageReleaseNotes>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="ConfiguredSqlConnection" Version="1.2.2" />
