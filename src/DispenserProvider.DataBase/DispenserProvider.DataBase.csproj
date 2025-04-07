@@ -7,7 +7,7 @@
     <PackageReleaseNotes>https://github.com/The-Poolz/DispenserProvider.DataBase/releases/tag/v1.0.15-prod</PackageReleaseNotes>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="ConfiguredSqlConnection" Version="1.2.1" />
+    <PackageReference Include="ConfiguredSqlConnection" Version="1.2.2" />
     <PackageReference Include="Net.Cryptography.SHA256" Version="1.1.0" />
     <PackageReference Include="Net.Web3.EthereumWallet" Version="1.2.0" />
   </ItemGroup>
