@@ -23,14 +23,6 @@ jobs:
         with:
           dotnet-version: '8.0.x'
 
-      - name: Install dotnet-ef
-        run: |
-          dotnet tool install --global dotnet-ef
-          echo "$HOME/.dotnet/tools" >> $GITHUB_PATH
-
-      - name: Download RDS CA bundle
-        run: curl -sSLo rds-ca.pem https://truststore.pki.rds.amazonaws.com/global/global-bundle.pem
-
       - name: Restore & Build
         run: |
           dotnet restore
@@ -103,6 +95,14 @@ jobs:
               echo "db_host=${{ secrets.PROD_DB_HOST }}" >> "$GITHUB_OUTPUT"
             fi
           fi
+
+      - name: Install dotnet-ef
+        run: |
+          dotnet tool install --global dotnet-ef
+          echo "$HOME/.dotnet/tools" >> $GITHUB_PATH
+
+      - name: Download RDS CA bundle
+        run: curl -sSLo rds-ca.pem https://truststore.pki.rds.amazonaws.com/global/global-bundle.pem
 
       - name: Generate IAM DB auth token
         id: token_generation
