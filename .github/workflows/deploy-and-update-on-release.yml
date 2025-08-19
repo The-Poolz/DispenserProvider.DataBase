@@ -128,7 +128,6 @@ jobs:
           DB_USER: ${{ secrets.DB_USER }}
           TOKEN:   ${{ steps.token_generation.outputs.token }}
         run: |
-          dotnet tool install --global dotnet-ef --version 8.0.0
           dotnet tool restore
           CONN="Host=$DB_HOST;Port=5432;Database=$DB_NAME;Username=$DB_USER;Password=$TOKEN;SSL Mode=VerifyFull;Root Certificate=$PWD/rds-ca.pem"
           export CONFIGUREDSQLCONNECTION_SECRET_NAME_OF_CONNECTION="$CONN"
