@@ -120,7 +120,7 @@ jobs:
             --username "$DB_USER")
           echo "token=$TOKEN" >> "$GITHUB_OUTPUT"
 
-      - name: Apply EF Core migrations
+      - name: Deploy EF Core Migrations
         if: ${{ steps.select_db.outputs.db_host != '' }}
         env:
           DB_HOST: ${{ steps.select_db.outputs.db_host }}
@@ -128,9 +128,11 @@ jobs:
           DB_USER: ${{ secrets.DB_USER }}
           TOKEN:   ${{ steps.token_generation.outputs.token }}
         run: |
+          dotnet tool install --global dotnet-ef --version 8.0.0
+          dotnet tool restore
           CONN="Host=$DB_HOST;Port=5432;Database=$DB_NAME;Username=$DB_USER;Password=$TOKEN;SSL Mode=VerifyFull;Root Certificate=$PWD/rds-ca.pem"
           export CONFIGUREDSQLCONNECTION_SECRET_NAME_OF_CONNECTION="$CONN"
-          dotnet ef database update --project "./src/DispenserProvider.Migrations/DispenserProvider.Migrations.csproj" -v
+          dotnet ef database update -c DispenserContext -p ./src/DispenserProvider.Migrations/DispenserProvider.Migrations.csproj -s ./src/DispenserProvider.Migrations/DispenserProvider.Migrations.csproj
 
       - name: Package and Push NuGet Package to GitHub Packages
         if: contains(env.TAG, '-prod')
