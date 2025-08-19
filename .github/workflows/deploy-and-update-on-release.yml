@@ -113,14 +113,11 @@ jobs:
           DB_HOST: ${{ steps.select_db.outputs.db_host }}
           DB_USER: ${{ secrets.DB_USER }}
         run: |
-          aws sts get-caller-identity
-          echo "Region: ${AWS_REGION}"
           TOKEN=$(aws rds generate-db-auth-token \
             --hostname "$DB_HOST" \
             --port 5432 \
             --region "$AWS_REGION" \
             --username "$DB_USER")
-          echo "::add-mask::$TOKEN"
           echo "token=$TOKEN" >> "$GITHUB_OUTPUT"
 
       - name: Apply EF Core migrations
@@ -132,7 +129,8 @@ jobs:
           TOKEN:   ${{ steps.token_generation.outputs.token }}
         run: |
           CONN="Host=$DB_HOST;Port=5432;Database=$DB_NAME;Username=$DB_USER;Password=$TOKEN;SSL Mode=VerifyFull;Root Certificate=$PWD/rds-ca.pem"
-          dotnet ef database update --connection "$CONN" --project "./src/DispenserProvider.Migrations/DispenserProvider.Migrations.csproj" -v
+          echo "CONFIGUREDSQLCONNECTION_SECRET_NAME_OF_CONNECTION=$CONN" >> $GITHUB_ENV
+          dotnet ef database update --project "./src/DispenserProvider.Migrations/DispenserProvider.Migrations.csproj" -v
 
       - name: Package and Push NuGet Package to GitHub Packages
         if: contains(env.TAG, '-prod')
