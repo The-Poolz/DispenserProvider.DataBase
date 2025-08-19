@@ -38,11 +38,6 @@ jobs:
           echo "TAG=$TAG" >> $GITHUB_ENV
           echo "VERSION=$VERSION" >> $GITHUB_ENV
           echo "Version extracted: $VERSION"
-          if [[ "$TAG" == *"-stage"* ]]; then
-            echo "CONFIGUREDSQLCONNECTION_ACTION_CONNECTION=${{ secrets.STAGE_CONNECTION }}" >> $GITHUB_ENV
-          else
-            echo "CONFIGUREDSQLCONNECTION_ACTION_CONNECTION=${{ secrets.PROD_CONNECTION }}" >> $GITHUB_ENV
-          fi
 
       - name: Update .csproj with version and release notes
         if: contains(env.TAG, '-stage')
@@ -87,7 +82,6 @@ jobs:
       - name: Select target DB host
         id: select_db
         run: |
-          # Условие: есть PR-номер и TAG содержит -stage или -prod
           if [ -n "${{ steps.create_pr.outputs.pull-request-number }}" ]; then
             if [[ "${{ env.TAG }}" == *"-stage"* ]]; then
               echo "db_host=${{ secrets.STAGE_DB_HOST }}" >> "$GITHUB_OUTPUT"
