@@ -123,7 +123,7 @@ jobs:
       - name: Deploy EF Core Migrations
         if: ${{ steps.select_db.outputs.db_host != '' }}
         env:
-          CONFIGUREDSQLCONNECTION_SECRET_NAME_OF_CONNECTION: >-
+          CONFIGUREDSQLCONNECTION_ACTION_CONNECTION: >-
             Host=${{ steps.select_db.outputs.db_host }};
             Port=5432;
             Database=${{ secrets.DB_NAME }};
