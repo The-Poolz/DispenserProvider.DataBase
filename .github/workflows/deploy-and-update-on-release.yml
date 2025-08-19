@@ -11,6 +11,8 @@ permissions:
 jobs:
   deploy_and_update:
     runs-on: ubuntu-latest
+    env:
+      AWS_REGION: ${{ secrets.AWS_REGION }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -98,15 +100,25 @@ jobs:
       - name: Download RDS CA bundle
         run: curl -sSLo rds-ca.pem https://truststore.pki.rds.amazonaws.com/global/global-bundle.pem
 
+      - name: Configure AWS credentials (OIDC)
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
       - name: Generate IAM DB auth token
         id: token_generation
-        if: ${{ steps.select_db.outputs.db_host != '' }}
         env:
           DB_HOST: ${{ steps.select_db.outputs.db_host }}
           DB_USER: ${{ secrets.DB_USER }}
-          AWS_REGION: ${{ secrets.AWS_REGION }}
         run: |
-          TOKEN=$(aws rds generate-db-auth-token --hostname "$DB_HOST" --port 5432 --region "$AWS_REGION" --username "$DB_USER")
+          aws sts get-caller-identity
+          echo "Region: ${AWS_REGION}"
+          TOKEN=$(aws rds generate-db-auth-token \
+            --hostname "$DB_HOST" \
+            --port 5432 \
+            --region "$AWS_REGION" \
+            --username "$DB_USER")
           echo "::add-mask::$TOKEN"
           echo "token=$TOKEN" >> "$GITHUB_OUTPUT"
 
