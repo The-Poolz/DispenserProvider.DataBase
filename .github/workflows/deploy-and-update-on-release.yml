@@ -37,9 +37,9 @@ jobs:
           echo "VERSION=$VERSION" >> $GITHUB_ENV
           echo "Version extracted: $VERSION"
           if [[ "$TAG" == *"-stage"* ]]; then
-            echo "CONFIGUREDSQLCONNECTION_ACTION_CONNECTION=${{ secrets.PART_OF_CONNECTION }}${{ secrets.STAGE_DB_NAME }}" >> $GITHUB_ENV
+            echo "CONFIGUREDSQLCONNECTION_ACTION_CONNECTION=${{ secrets.STAGE_CONNECTION }}" >> $GITHUB_ENV
           else
-            echo "CONFIGUREDSQLCONNECTION_ACTION_CONNECTION=${{ secrets.PART_OF_CONNECTION }}${{ secrets.PROD_DB_NAME }}" >> $GITHUB_ENV
+            echo "CONFIGUREDSQLCONNECTION_ACTION_CONNECTION=${{ secrets.PROD_CONNECTION }}" >> $GITHUB_ENV
           fi
 
       - name: Update .csproj with version and release notes
