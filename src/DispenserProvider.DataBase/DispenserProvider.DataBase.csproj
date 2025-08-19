@@ -7,8 +7,13 @@
     <PackageReleaseNotes>https://github.com/The-Poolz/DispenserProvider.DataBase/releases/tag/v1.0.16-prod</PackageReleaseNotes>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="ConfiguredSqlConnection" Version="1.2.2" />
+    <PackageReference Include="ConfiguredSqlConnection.PostgresSql" Version="2.0.0" />
     <PackageReference Include="Net.Cryptography.SHA256" Version="1.1.0" />
     <PackageReference Include="Net.Web3.EthereumWallet" Version="1.2.0" />
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.11" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.14">
+	    <PrivateAssets>all</PrivateAssets>
+	    <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
   </ItemGroup>
 </Project>

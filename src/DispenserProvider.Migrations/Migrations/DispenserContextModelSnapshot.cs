@@ -3,8 +3,8 @@ using System;
 using DispenserProvider.DataBase;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
@@ -17,10 +17,10 @@ namespace DispenserProvider.DataBase.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.8")
-                .HasAnnotation("Relational:MaxIdentifierLength", 128);
+                .HasAnnotation("ProductVersion", "8.0.14")
+                .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
-            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+            NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
             modelBuilder.Entity("DispenserProvider.DataBase.Models.BuilderDTO", b =>
                 {
@@ -28,49 +28,57 @@ namespace DispenserProvider.DataBase.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
                     b.Property<DateTime?>("FinishTime")
-                        .HasColumnType("datetime2(0)");
+                        .HasPrecision(0)
+                        .HasColumnType("timestamptz");
 
                     b.Property<string>("ProviderAddress")
                         .IsRequired()
-                        .HasColumnType("nvarchar(42)");
+                        .HasMaxLength(42)
+                        .HasColumnType("character varying(42)");
 
                     b.Property<DateTime?>("StartTime")
-                        .HasColumnType("datetime2(0)");
+                        .HasPrecision(0)
+                        .HasColumnType("timestamptz");
 
                     b.Property<long>("TransactionDetailId")
                         .HasColumnType("bigint");
 
                     b.Property<string>("WeiAmount")
                         .IsRequired()
-                        .HasColumnType("nvarchar(78)");
+                        .HasMaxLength(78)
+                        .HasColumnType("character varying(78)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("TransactionDetailId");
 
-                    b.ToTable("Builders");
+                    b.ToTable("Builders", (string)null);
                 });
 
             modelBuilder.Entity("DispenserProvider.DataBase.Models.DispenserDTO", b =>
                 {
                     b.Property<string>("Id")
-                        .HasColumnType("nvarchar(64)");
+                        .HasMaxLength(64)
+                        .HasColumnType("character varying(64)");
 
                     b.Property<string>("CreationLogSignature")
                         .IsRequired()
-                        .HasColumnType("nvarchar(132)");
+                        .HasMaxLength(132)
+                        .HasColumnType("character varying(132)");
 
                     b.Property<string>("DeletionLogSignature")
-                        .HasColumnType("nvarchar(132)");
+                        .HasMaxLength(132)
+                        .HasColumnType("character varying(132)");
 
                     b.Property<long?>("RefundDetailId")
                         .HasColumnType("bigint");
 
                     b.Property<DateTime?>("RefundFinishTime")
-                        .HasColumnType("datetime2(0)");
+                        .HasPrecision(0)
+                        .HasColumnType("timestamptz");
 
                     b.Property<long>("WithdrawalDetailId")
                         .HasColumnType("bigint");
@@ -82,54 +90,59 @@ namespace DispenserProvider.DataBase.Migrations
                     b.HasIndex("DeletionLogSignature");
 
                     b.HasIndex("RefundDetailId")
-                        .IsUnique()
-                        .HasFilter("[RefundDetailId] IS NOT NULL");
+                        .IsUnique();
 
                     b.HasIndex("WithdrawalDetailId")
                         .IsUnique();
 
-                    b.ToTable("Dispenser");
+                    b.ToTable("Dispenser", (string)null);
                 });
 
             modelBuilder.Entity("DispenserProvider.DataBase.Models.LogDTO", b =>
                 {
                     b.Property<string>("Signature")
-                        .HasColumnType("nvarchar(132)");
+                        .HasMaxLength(132)
+                        .HasColumnType("character varying(132)");
 
                     b.Property<DateTime>("CreationTime")
-                        .HasColumnType("datetime2(0)");
+                        .HasPrecision(0)
+                        .HasColumnType("timestamptz");
 
                     b.Property<bool>("IsCreation")
-                        .HasColumnType("bit");
+                        .HasColumnType("boolean");
 
                     b.HasKey("Signature");
 
-                    b.ToTable("Logs");
+                    b.ToTable("Logs", (string)null);
                 });
 
             modelBuilder.Entity("DispenserProvider.DataBase.Models.SignatureDTO", b =>
                 {
                     b.Property<string>("Signature")
-                        .HasColumnType("nvarchar(132)");
+                        .HasMaxLength(132)
+                        .HasColumnType("character varying(132)");
 
                     b.Property<string>("DispenserId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(64)");
+                        .HasMaxLength(64)
+                        .HasColumnType("character varying(64)");
 
                     b.Property<bool>("IsRefund")
-                        .HasColumnType("bit");
+                        .HasColumnType("boolean");
 
                     b.Property<DateTime>("ValidFrom")
-                        .HasColumnType("datetime2(0)");
+                        .HasPrecision(0)
+                        .HasColumnType("timestamptz");
 
                     b.Property<DateTime>("ValidUntil")
-                        .HasColumnType("datetime2(0)");
+                        .HasPrecision(0)
+                        .HasColumnType("timestamptz");
 
                     b.HasKey("Signature");
 
                     b.HasIndex("DispenserId");
 
-                    b.ToTable("Signatures");
+                    b.ToTable("Signatures", (string)null);
                 });
 
             modelBuilder.Entity("DispenserProvider.DataBase.Models.TakenTrackDTO", b =>
@@ -138,21 +151,22 @@ namespace DispenserProvider.DataBase.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
                     b.Property<string>("DispenserId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(64)");
+                        .HasMaxLength(64)
+                        .HasColumnType("character varying(64)");
 
                     b.Property<bool>("IsRefunded")
-                        .HasColumnType("bit");
+                        .HasColumnType("boolean");
 
                     b.HasKey("Id");
 
                     b.HasIndex("DispenserId")
                         .IsUnique();
 
-                    b.ToTable("TakenTrack");
+                    b.ToTable("TakenTrack", (string)null);
                 });
 
             modelBuilder.Entity("DispenserProvider.DataBase.Models.TransactionDetailDTO", b =>
@@ -161,7 +175,7 @@ namespace DispenserProvider.DataBase.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
                     b.Property<long>("ChainId")
                         .HasColumnType("bigint");
@@ -171,14 +185,15 @@ namespace DispenserProvider.DataBase.Migrations
 
                     b.Property<string>("UserAddress")
                         .IsRequired()
-                        .HasColumnType("nvarchar(42)");
+                        .HasMaxLength(42)
+                        .HasColumnType("character varying(42)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("UserAddress", "ChainId", "PoolId")
                         .IsUnique();
 
-                    b.ToTable("TransactionDetails");
+                    b.ToTable("TransactionDetails", (string)null);
                 });
 
             modelBuilder.Entity("DispenserProvider.DataBase.Models.BuilderDTO", b =>
