@@ -98,9 +98,6 @@ jobs:
           dotnet tool install --global dotnet-ef --version 8.0.14
           echo "$HOME/.dotnet/tools" >> $GITHUB_PATH
 
-      - name: Download RDS CA bundle
-        run: curl -sSLo rds-ca.pem https://truststore.pki.rds.amazonaws.com/global/global-bundle.pem
-
       - name: Configure AWS credentials (OIDC)
         uses: aws-actions/configure-aws-credentials@v4
         with:
@@ -129,8 +126,6 @@ jobs:
             Database=${{ secrets.DB_NAME }};
             Username=${{ secrets.DB_USER }};
             Password=${{ steps.token_generation.outputs.token }};
-            SSL Mode=VerifyFull;
-            Root Certificate=${{ github.workspace }}/rds-ca.pem
         run: |
           dotnet ef database update -c DispenserContext -p ./src/DispenserProvider.Migrations/DispenserProvider.Migrations.csproj -s ./src/DispenserProvider.Migrations/DispenserProvider.Migrations.csproj
 
