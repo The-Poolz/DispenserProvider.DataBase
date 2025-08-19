@@ -6,11 +6,9 @@ namespace DispenserProvider.DataBase.Models;
 
 public class DispenserDTO
 {
-    [Column(TypeName = "nvarchar(64)")]
     public string Id { get; set; } = null!;
 
-    [Column(TypeName = "datetime2(0)")]
-    public DateTime? RefundFinishTime { get; set; }
+    public DateTimeOffset? RefundFinishTime { get; set; }
 
     public virtual List<SignatureDTO> UserSignatures { get; set; } = [];
 
@@ -28,11 +26,9 @@ public class DispenserDTO
     public long? RefundDetailId { get; set; }
     public virtual TransactionDetailDTO? RefundDetail { get; set; }
 
-    [Column(TypeName = "nvarchar(132)")]
     public string CreationLogSignature { get; set; } = null!;
     public virtual LogDTO CreationLog { get; set; } = null!;
 
-    [Column(TypeName = "nvarchar(132)")]
     public string? DeletionLogSignature { get; set; }
     public virtual LogDTO? DeletionLog { get; set; }
 

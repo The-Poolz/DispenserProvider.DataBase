@@ -3,27 +3,27 @@ using System;
 using DispenserProvider.DataBase;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
 namespace DispenserProvider.DataBase.Migrations
 {
     [DbContext(typeof(DispenserContext))]
-    [Migration("20241212121331_Remove-MessageIndex-Columns")]
-    partial class RemoveMessageIndexColumns
+    [Migration("20250813113611_Postgres-Init")]
+    partial class PostgresInit
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.8")
-                .HasAnnotation("Relational:MaxIdentifierLength", 128);
+                .HasAnnotation("ProductVersion", "8.0.14")
+                .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
-            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+            NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
             modelBuilder.Entity("DispenserProvider.DataBase.Models.BuilderDTO", b =>
                 {
@@ -31,23 +31,28 @@ namespace DispenserProvider.DataBase.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
-
-                    b.Property<decimal>("Amount")
-                        .HasColumnType("decimal(36,18)");
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
                     b.Property<DateTime?>("FinishTime")
-                        .HasColumnType("datetime2(0)");
+                        .HasPrecision(0)
+                        .HasColumnType("timestamptz");
 
                     b.Property<string>("ProviderAddress")
                         .IsRequired()
-                        .HasColumnType("nvarchar(42)");
+                        .HasMaxLength(42)
+                        .HasColumnType("character varying(42)");
 
                     b.Property<DateTime?>("StartTime")
-                        .HasColumnType("datetime2(0)");
+                        .HasPrecision(0)
+                        .HasColumnType("timestamptz");
 
                     b.Property<long>("TransactionDetailId")
                         .HasColumnType("bigint");
+
+                    b.Property<string>("WeiAmount")
+                        .IsRequired()
+                        .HasMaxLength(78)
+                        .HasColumnType("character varying(78)");
 
                     b.HasKey("Id");
 
@@ -59,27 +64,24 @@ namespace DispenserProvider.DataBase.Migrations
             modelBuilder.Entity("DispenserProvider.DataBase.Models.DispenserDTO", b =>
                 {
                     b.Property<string>("Id")
-                        .HasColumnType("nvarchar(64)");
+                        .HasMaxLength(64)
+                        .HasColumnType("character varying(64)");
 
                     b.Property<string>("CreationLogSignature")
                         .IsRequired()
-                        .HasColumnType("nvarchar(132)");
+                        .HasMaxLength(132)
+                        .HasColumnType("character varying(132)");
 
                     b.Property<string>("DeletionLogSignature")
-                        .HasColumnType("nvarchar(132)");
+                        .HasMaxLength(132)
+                        .HasColumnType("character varying(132)");
 
                     b.Property<long?>("RefundDetailId")
                         .HasColumnType("bigint");
 
-                    b.Property<DateTime>("RefundFinishTime")
-                        .HasColumnType("datetime2(0)");
-
-                    b.Property<string>("Signature")
-                        .HasColumnType("nvarchar(132)");
-
-                    b.Property<string>("UserAddress")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(42)");
+                    b.Property<DateTime?>("RefundFinishTime")
+                        .HasPrecision(0)
+                        .HasColumnType("timestamptz");
 
                     b.Property<long>("WithdrawalDetailId")
                         .HasColumnType("bigint");
@@ -91,12 +93,7 @@ namespace DispenserProvider.DataBase.Migrations
                     b.HasIndex("DeletionLogSignature");
 
                     b.HasIndex("RefundDetailId")
-                        .IsUnique()
-                        .HasFilter("[RefundDetailId] IS NOT NULL");
-
-                    b.HasIndex("Signature")
-                        .IsUnique()
-                        .HasFilter("[Signature] IS NOT NULL");
+                        .IsUnique();
 
                     b.HasIndex("WithdrawalDetailId")
                         .IsUnique();
@@ -107,14 +104,15 @@ namespace DispenserProvider.DataBase.Migrations
             modelBuilder.Entity("DispenserProvider.DataBase.Models.LogDTO", b =>
                 {
                     b.Property<string>("Signature")
-                        .HasColumnType("nvarchar(132)");
+                        .HasMaxLength(132)
+                        .HasColumnType("character varying(132)");
 
                     b.Property<DateTime>("CreationTime")
-                        .HasColumnType("datetime2(0)");
+                        .HasPrecision(0)
+                        .HasColumnType("timestamptz");
 
-                    b.Property<string>("Operation")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(32)");
+                    b.Property<bool>("IsCreation")
+                        .HasColumnType("boolean");
 
                     b.HasKey("Signature");
 
@@ -124,20 +122,54 @@ namespace DispenserProvider.DataBase.Migrations
             modelBuilder.Entity("DispenserProvider.DataBase.Models.SignatureDTO", b =>
                 {
                     b.Property<string>("Signature")
-                        .HasColumnType("nvarchar(132)");
+                        .HasMaxLength(132)
+                        .HasColumnType("character varying(132)");
+
+                    b.Property<string>("DispenserId")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("character varying(64)");
 
                     b.Property<bool>("IsRefund")
-                        .HasColumnType("bit");
+                        .HasColumnType("boolean");
 
                     b.Property<DateTime>("ValidFrom")
-                        .HasColumnType("datetime2(0)");
+                        .HasPrecision(0)
+                        .HasColumnType("timestamptz");
 
                     b.Property<DateTime>("ValidUntil")
-                        .HasColumnType("datetime2(0)");
+                        .HasPrecision(0)
+                        .HasColumnType("timestamptz");
 
                     b.HasKey("Signature");
 
+                    b.HasIndex("DispenserId");
+
                     b.ToTable("Signatures");
+                });
+
+            modelBuilder.Entity("DispenserProvider.DataBase.Models.TakenTrackDTO", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<string>("DispenserId")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("character varying(64)");
+
+                    b.Property<bool>("IsRefunded")
+                        .HasColumnType("boolean");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DispenserId")
+                        .IsUnique();
+
+                    b.ToTable("TakenTrack");
                 });
 
             modelBuilder.Entity("DispenserProvider.DataBase.Models.TransactionDetailDTO", b =>
@@ -146,7 +178,7 @@ namespace DispenserProvider.DataBase.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
                     b.Property<long>("ChainId")
                         .HasColumnType("bigint");
@@ -154,7 +186,15 @@ namespace DispenserProvider.DataBase.Migrations
                     b.Property<long>("PoolId")
                         .HasColumnType("bigint");
 
+                    b.Property<string>("UserAddress")
+                        .IsRequired()
+                        .HasMaxLength(42)
+                        .HasColumnType("character varying(42)");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("UserAddress", "ChainId", "PoolId")
+                        .IsUnique();
 
                     b.ToTable("TransactionDetails");
                 });
@@ -184,17 +224,12 @@ namespace DispenserProvider.DataBase.Migrations
                         .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("DispenserProvider.DataBase.Models.TransactionDetailDTO", "RefundDetail")
-                        .WithOne()
+                        .WithOne("RefundDispenser")
                         .HasForeignKey("DispenserProvider.DataBase.Models.DispenserDTO", "RefundDetailId")
                         .OnDelete(DeleteBehavior.Restrict);
 
-                    b.HasOne("DispenserProvider.DataBase.Models.SignatureDTO", "UserSignature")
-                        .WithOne("Dispenser")
-                        .HasForeignKey("DispenserProvider.DataBase.Models.DispenserDTO", "Signature")
-                        .OnDelete(DeleteBehavior.Restrict);
-
                     b.HasOne("DispenserProvider.DataBase.Models.TransactionDetailDTO", "WithdrawalDetail")
-                        .WithOne("Dispenser")
+                        .WithOne("WithdrawalDispenser")
                         .HasForeignKey("DispenserProvider.DataBase.Models.DispenserDTO", "WithdrawalDetailId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
@@ -205,9 +240,36 @@ namespace DispenserProvider.DataBase.Migrations
 
                     b.Navigation("RefundDetail");
 
-                    b.Navigation("UserSignature");
-
                     b.Navigation("WithdrawalDetail");
+                });
+
+            modelBuilder.Entity("DispenserProvider.DataBase.Models.SignatureDTO", b =>
+                {
+                    b.HasOne("DispenserProvider.DataBase.Models.DispenserDTO", "Dispenser")
+                        .WithMany("UserSignatures")
+                        .HasForeignKey("DispenserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Dispenser");
+                });
+
+            modelBuilder.Entity("DispenserProvider.DataBase.Models.TakenTrackDTO", b =>
+                {
+                    b.HasOne("DispenserProvider.DataBase.Models.DispenserDTO", "Dispenser")
+                        .WithOne("TakenTrack")
+                        .HasForeignKey("DispenserProvider.DataBase.Models.TakenTrackDTO", "DispenserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Dispenser");
+                });
+
+            modelBuilder.Entity("DispenserProvider.DataBase.Models.DispenserDTO", b =>
+                {
+                    b.Navigation("TakenTrack");
+
+                    b.Navigation("UserSignatures");
                 });
 
             modelBuilder.Entity("DispenserProvider.DataBase.Models.LogDTO", b =>
@@ -217,18 +279,13 @@ namespace DispenserProvider.DataBase.Migrations
                     b.Navigation("DeletionDispensers");
                 });
 
-            modelBuilder.Entity("DispenserProvider.DataBase.Models.SignatureDTO", b =>
-                {
-                    b.Navigation("Dispenser")
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("DispenserProvider.DataBase.Models.TransactionDetailDTO", b =>
                 {
                     b.Navigation("Builders");
 
-                    b.Navigation("Dispenser")
-                        .IsRequired();
+                    b.Navigation("RefundDispenser");
+
+                    b.Navigation("WithdrawalDispenser");
                 });
 #pragma warning restore 612, 618
         }

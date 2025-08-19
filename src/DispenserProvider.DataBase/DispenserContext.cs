@@ -1,8 +1,8 @@
 ﻿using Net.Web3.EthereumWallet;
 using Microsoft.EntityFrameworkCore;
 using DispenserProvider.DataBase.Models;
-using ConfiguredSqlConnection.Extensions;
 using Net.Web3.EthereumWallet.Extensions;
+using ConfiguredSqlConnection.PostgresSql.Extensions;
 
 namespace DispenserProvider.DataBase;
 
@@ -123,5 +123,38 @@ public class DispenserContext : DbContext
                 .HasForeignKey<TakenTrackDTO>(e => e.DispenserId)
                 .OnDelete(DeleteBehavior.Restrict);
         });
+
+        if (Database.IsNpgsql())
+        {
+            modelBuilder.Entity<BuilderDTO>().Property(x => x.ProviderAddress).HasMaxLength(42);
+            modelBuilder.Entity<BuilderDTO>().Property(x => x.WeiAmount).HasMaxLength(78);
+
+            modelBuilder.Entity<DispenserDTO>().Property(x => x.Id).HasMaxLength(64);
+            modelBuilder.Entity<DispenserDTO>().Property(x => x.CreationLogSignature).HasMaxLength(132);
+            modelBuilder.Entity<DispenserDTO>().Property(x => x.DeletionLogSignature).HasMaxLength(132);
+
+            modelBuilder.Entity<LogDTO>().Property(x => x.Signature).HasMaxLength(132);
+
+            modelBuilder.Entity<SignatureDTO>().Property(x => x.Signature).HasMaxLength(132);
+            modelBuilder.Entity<SignatureDTO>().Property(x => x.DispenserId).HasMaxLength(64);
+
+            modelBuilder.Entity<TakenTrackDTO>().Property(x => x.DispenserId).HasMaxLength(64);
+
+            modelBuilder.Entity<TransactionDetailDTO>().Property(x => x.UserAddress).HasMaxLength(42);
+
+            modelBuilder.Entity<BuilderDTO>().Property(x => x.StartTime).HasColumnType("timestamptz").HasPrecision(0);
+            modelBuilder.Entity<BuilderDTO>().Property(x => x.FinishTime).HasColumnType("timestamptz").HasPrecision(0);
+
+            modelBuilder.Entity<DispenserDTO>().Property(x => x.RefundFinishTime).HasColumnType("timestamptz").HasPrecision(0);
+
+            modelBuilder.Entity<LogDTO>().Property(x => x.CreationTime).HasColumnType("timestamptz").HasPrecision(0);
+
+            modelBuilder.Entity<SignatureDTO>().Property(x => x.ValidFrom).HasColumnType("timestamptz").HasPrecision(0);
+            modelBuilder.Entity<SignatureDTO>().Property(x => x.ValidUntil).HasColumnType("timestamptz").HasPrecision(0);
+
+            modelBuilder.Entity<BuilderDTO>().Property(x => x.Id).ValueGeneratedOnAdd();
+            modelBuilder.Entity<TakenTrackDTO>().Property(x => x.Id).ValueGeneratedOnAdd();
+            modelBuilder.Entity<TransactionDetailDTO>().Property(x => x.Id).ValueGeneratedOnAdd();
+        }
     }
 }

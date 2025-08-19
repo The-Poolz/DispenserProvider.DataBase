@@ -11,7 +11,6 @@ public class TakenTrackDTO
     [NotMapped]
     public bool IsWithdrawn => !IsRefunded;
 
-    [Column(TypeName = "nvarchar(64)")]
     public string DispenserId { get; set; } = null!;
 
     public virtual DispenserDTO Dispenser { get; set; } = null!;
