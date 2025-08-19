@@ -129,7 +129,7 @@ jobs:
           TOKEN:   ${{ steps.token_generation.outputs.token }}
         run: |
           CONN="Host=$DB_HOST;Port=5432;Database=$DB_NAME;Username=$DB_USER;Password=$TOKEN;SSL Mode=VerifyFull;Root Certificate=$PWD/rds-ca.pem"
-          echo "CONFIGUREDSQLCONNECTION_SECRET_NAME_OF_CONNECTION=$CONN" >> $GITHUB_ENV
+          export CONFIGUREDSQLCONNECTION_SECRET_NAME_OF_CONNECTION="$CONN"
           dotnet ef database update --project "./src/DispenserProvider.Migrations/DispenserProvider.Migrations.csproj" -v
 
       - name: Package and Push NuGet Package to GitHub Packages
