@@ -117,10 +117,6 @@ jobs:
             --username "$DB_USER")
           echo "token=$TOKEN" >> "$GITHUB_OUTPUT"
 
-      - name: Check AWS
-        run: |
-          aws sts get-caller-identity
-
       - name: Download RDS CA bundle
         run: curl -sSLo rds-ca.pem https://truststore.pki.rds.amazonaws.com/global/global-bundle.pem
 
