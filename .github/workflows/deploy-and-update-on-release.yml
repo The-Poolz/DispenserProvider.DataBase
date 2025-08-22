@@ -117,30 +117,17 @@ jobs:
             --username "$DB_USER")
           echo "token=$TOKEN" >> "$GITHUB_OUTPUT"
 
-      - name: Download RDS CA bundle
-        run: curl -sSLo rds-ca.pem https://truststore.pki.rds.amazonaws.com/global/global-bundle.pem
-
-      - name: Build connection string
-        id: conn
-        env:
-          DB_HOST: ${{ steps.select_db.outputs.db_host }}
-          DB_NAME: ${{ secrets.DB_NAME }}
-          DB_USER: ${{ secrets.DB_USER }}
-          DB_TOKEN: ${{ steps.token_generation.outputs.token }}
-        run: |
-          set -euo pipefail
-          CERT_PATH="$(pwd)/rds-ca.pem"
-          CONNSTR="Host=${DB_HOST};Port=5432;Database=${DB_NAME};Username=${DB_USER};Password=${DB_TOKEN};SSL Mode=VerifyFull;Root Certificate=${CERT_PATH};"
-          echo "CONFIGUREDSQLCONNECTION_ACTION_CONNECTION=${CONNSTR}" >> "$GITHUB_ENV"
-      
       - name: Deploy EF Core Migrations
         if: ${{ steps.select_db.outputs.db_host != '' }}
         env:
-          CONFIGUREDSQLCONNECTION_ACTION_CONNECTION: ${{ env.CONFIGUREDSQLCONNECTION_ACTION_CONNECTION }}
+          CONFIGUREDSQLCONNECTION_ACTION_CONNECTION: >-
+            Host=${{ steps.select_db.outputs.db_host }};
+            Port=5432;
+            Database=${{ secrets.DB_NAME }};
+            Username=${{ secrets.DB_USER }};
+            Password=${{ steps.token_generation.outputs.token }};
         run: |
-          dotnet ef database update -c DispenserContext \
-            -p ./src/DispenserProvider.Migrations/DispenserProvider.Migrations.csproj \
-            -s ./src/DispenserProvider.Migrations/DispenserProvider.Migrations.csproj
+          dotnet ef database update -c DispenserContext -p ./src/DispenserProvider.Migrations/DispenserProvider.Migrations.csproj -s ./src/DispenserProvider.Migrations/DispenserProvider.Migrations.csproj
 
       - name: Package and Push NuGet Package to GitHub Packages
         if: contains(env.TAG, '-prod')
