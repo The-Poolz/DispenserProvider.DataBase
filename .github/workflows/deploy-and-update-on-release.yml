@@ -117,6 +117,9 @@ jobs:
             --username "$DB_USER")
           echo "token=$TOKEN" >> "$GITHUB_OUTPUT"
 
+      - name: Download RDS CA bundle
+        run: curl -sSLo rds-ca.pem https://truststore.pki.rds.amazonaws.com/global/global-bundle.pem
+
       - name: Deploy EF Core Migrations
         if: ${{ steps.select_db.outputs.db_host != '' }}
         env:
@@ -126,6 +129,8 @@ jobs:
             Database=${{ secrets.DB_NAME }};
             Username=${{ secrets.DB_USER }};
             Password=${{ steps.token_generation.outputs.token }};
+            SSL Mode=VerifyFull;
+            Root Certificate=$PWD/rds-ca.pem;
         run: |
           dotnet ef database update -c DispenserContext -p ./src/DispenserProvider.Migrations/DispenserProvider.Migrations.csproj -s ./src/DispenserProvider.Migrations/DispenserProvider.Migrations.csproj
 
