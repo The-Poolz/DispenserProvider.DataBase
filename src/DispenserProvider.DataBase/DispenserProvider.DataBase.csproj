@@ -3,11 +3,11 @@
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <Version>2.0.0</Version>
-    <PackageReleaseNotes>https://github.com/The-Poolz/DispenserProvider.DataBase/releases/tag/v2.0.0-prod</PackageReleaseNotes>
+    <Version>2.0.1</Version>
+    <PackageReleaseNotes>https://github.com/The-Poolz/DispenserProvider.DataBase/releases/tag/v2.0.1-prod</PackageReleaseNotes>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="ConfiguredSqlConnection.PostgresSql" Version="2.0.0" />
+    <PackageReference Include="ConfiguredSqlConnection.PostgresSql" Version="2.0.1" />
     <PackageReference Include="Net.Cryptography.SHA256" Version="1.1.0" />
     <PackageReference Include="Net.Web3.EthereumWallet" Version="1.2.2" />
   </ItemGroup>
